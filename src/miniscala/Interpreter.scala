@@ -11,33 +11,25 @@ import scala.io.StdIn
 object Interpreter {
 
   sealed abstract class Val
-
   case class IntVal(v: Int) extends Val
-
   case class BoolVal(v: Boolean) extends Val
-
   case class FloatVal(v: Float) extends Val
-
   case class StringVal(v: String) extends Val
-
   case class TupleVal(vs: List[Val]) extends Val
+  case class ClosureVal(params: List[FunParam], optrestype: Option[Type], body: Exp, env: Env, defs: List[DefDecl]) extends Val
 
-  case class Closure(params: List[FunParam], optrestype: Option[Type], body: Exp, venv: VarEnv, fenv: FunEnv)
+  type Env = Map[Id, Val]
 
-  type VarEnv = Map[Var, Val]
-
-  type FunEnv = Map[Fun, Closure]
-
-  def eval(e: Exp, venv: VarEnv, fenv: FunEnv): Val = e match {
+  def eval(e: Exp, env: Env): Val = e match {
     case IntLit(c) => IntVal(c)
     case BoolLit(c) => BoolVal(c)
     case FloatLit(c) => FloatVal(c)
     case StringLit(c) => StringVal(c)
     case VarExp(x) =>
-      venv.getOrElse(x, throw new InterpreterError(s"Unknown identifier '$x'", e))
+      env.getOrElse(x, throw new InterpreterError(s"Unknown identifier '$x'", e))
     case BinOpExp(leftexp, op, rightexp) =>
-      val leftval = eval(leftexp, venv, fenv)
-      val rightval = eval(rightexp, venv, fenv)
+      val leftval = eval(leftexp, env)
+      val rightval = eval(rightexp, env)
       op match {
         case PlusBinOp() =>
           (leftval, rightval) match {
@@ -100,18 +92,18 @@ object Interpreter {
           }
         case LessThanBinOp() =>
           (leftval, rightval) match {
-            case (IntVal(v1), IntVal(v2)) => if (v1 < v2) BoolVal(true) else BoolVal(false)
-            case (FloatVal(v1), FloatVal(v2)) => if (v1 < v2) BoolVal(true) else BoolVal(false)
-            case (IntVal(v1), FloatVal(v2)) => if (v1 < v2) BoolVal(true) else BoolVal(false)
-            case (FloatVal(v1), IntVal(v2)) => if (v1 < v2) BoolVal(true) else BoolVal(false)
+            case (IntVal(v1), IntVal(v2)) => BoolVal(v1 < v2)
+            case (FloatVal(v1), FloatVal(v2)) => BoolVal(v1 < v2)
+            case (IntVal(v1), FloatVal(v2)) => BoolVal(v1 < v2)
+            case (FloatVal(v1), IntVal(v2)) => BoolVal(v1 < v2)
             case _ => throw new InterpreterError(s"Type mismatch at '<', unexpected values ${valueToString(leftval)} and ${valueToString(rightval)}", op)
           }
         case LessThanOrEqualBinOp() =>
           (leftval, rightval) match {
-            case (IntVal(v1), IntVal(v2)) => if (v1 <= v2) BoolVal(true) else BoolVal(false)
-            case (FloatVal(v1), FloatVal(v2)) => if (v1 <= v2) BoolVal(true) else BoolVal(false)
-            case (IntVal(v1), FloatVal(v2)) => if (v1 <= v2) BoolVal(true) else BoolVal(false)
-            case (FloatVal(v1), IntVal(v2)) => if (v1 <= v2) BoolVal(true) else BoolVal(false)
+            case (IntVal(v1), IntVal(v2)) => BoolVal(v1 <= v2)
+            case (FloatVal(v1), FloatVal(v2)) => BoolVal(v1 <= v2)
+            case (IntVal(v1), FloatVal(v2)) => BoolVal(v1 <= v2)
+            case (FloatVal(v1), IntVal(v2)) => BoolVal(v1 <= v2)
             case _ => throw new InterpreterError(s"Type mismatch at '<=', unexpected values ${valueToString(leftval)} and ${valueToString(rightval)}", op)
           }
         case MaxBinOp() =>
@@ -124,20 +116,17 @@ object Interpreter {
           }
         case AndBinOp() =>
           (leftval, rightval) match {
-            case (BoolVal(true), BoolVal(true)) => BoolVal(true)
-            case (BoolVal(true), BoolVal(false)) => BoolVal(false)
-            case (BoolVal(false), BoolVal(true)) => BoolVal(false)
-            case (BoolVal(false), BoolVal(false)) => BoolVal(false)
+            case (BoolVal(v1), BoolVal(v2)) => BoolVal(v1 & v2)
             case _ => throw new InterpreterError(s"Type mismatch at '&', unexpected values ${valueToString(leftval)} and ${valueToString(rightval)}", op)
           }
         case OrBinOp() =>
           (leftval, rightval) match {
-            case (BoolVal(v1), BoolVal(v2)) => BoolVal(v1 & v2)
+            case (BoolVal(v1), BoolVal(v2)) => BoolVal(v1 | v2)
             case _ => throw new InterpreterError(s"Type mismatch at '|', unexpected values ${valueToString(leftval)} and ${valueToString(rightval)}", op)
           }
       }
     case UnOpExp(op, exp) =>
-      val expval = eval(exp, venv, fenv)
+      val expval = eval(exp, env)
       op match {
         case NegUnOp() =>
           expval match {
@@ -152,62 +141,66 @@ object Interpreter {
           }
       }
     case IfThenElseExp(condexp, thenexp, elseexp) =>
-      val condval = eval(condexp, venv, fenv)
+      val condval = eval(condexp, env)
       condval match {
-        case BoolVal(true) => eval(thenexp, venv, fenv)
-        case BoolVal(false) => eval(elseexp, venv, fenv)
+        case BoolVal(true) => eval(thenexp, env)
+        case BoolVal(false) => eval(elseexp, env)
         case _ => throw new InterpreterError(s"Type mismatch at 'If/Else', unexpected value ${valueToString(condval)}", e)
       }
     case BlockExp(vals, defs, exp) =>
-      var venv1 = venv
+      var env1 = env
       for (d <- vals) {
-        val v = eval(d.exp, venv1, fenv)
-        venv1 = venv1 + (d.x -> v)
+        val v = eval(d.exp, env1)
+        env1 = env1 + (d.x -> v)
       }
-      var fenv1 = fenv
-      for (d <- defs) {
-        fenv1 += (d.fun -> Closure(d.params, d.optrestype, d.body, venv, fenv))
-      }
-      eval(exp, venv1, fenv1)
+      var env2 = env1
+      for (d <- defs)
+        env2 += (d.fun -> ClosureVal(d.params, d.optrestype, d.body, env1, defs))
+      eval(exp, env2)
     case TupleExp(exps) =>
       var vals = List[Val]()
       for (exp <- exps)
-        vals = eval(exp, venv, fenv) :: vals
+        vals = eval(exp, env) :: vals
       TupleVal(vals.reverse)
     case MatchExp(exp, cases) =>
-      val expval = eval(exp, venv, fenv)
+      val expval = eval(exp, env)
       expval match {
         case TupleVal(vs) =>
           for (c <- cases) {
             if (vs.length == c.pattern.length) {
-              var venv1 = venv
+              var env1 = env
               for ((x, y) <- vs.zip(c.pattern)) {
-                venv1 = venv1 + (y -> x)
+                env1 = env1 + (y -> x)
               }
-              return eval(c.exp, venv1, fenv)
+              return eval(c.exp, env1)
             }
           }
           throw new InterpreterError(s"No case matches value ${valueToString(expval)}", e)
         case _ => throw new InterpreterError(s"Tuple expected at match, found ${valueToString(expval)}", e)
       }
-    case CallExp(fun, args) =>
-      val Closure(params, t, e, cvenv, cfenv) = fenv(fun)
-      var i = 0
-      var nvenv: VarEnv = cvenv
+    case CallExp(funexp, args) =>
+      val ClosureVal(params, ty, ex, cenv, defs) = eval(funexp, env)
+      var nenv = cenv
       if(params.length == args.length) {
-        for (p <- params) {
-          val argval = eval(args(i), venv, fenv)
+        for ((p,a) <- params.zip(args)) {
+          val argval = eval(a, env)
           checkValueType(argval, p.opttype, p)
-          nvenv = nvenv + (p.x -> argval)
-          i += 1
+          nenv = nenv + (p.x -> argval)
         }
       }
-      val nfenv: FunEnv = cfenv + (fun -> fenv(fun))
-      val k = eval(e, nvenv, nfenv)
-      checkValueType(k, t, e)
+      var nnenv = nenv
+      for (d <- defs) {
+        nnenv = nnenv + (d.fun -> env(d.fun))
+      }
+      val k = eval(ex, nnenv)
+      checkValueType(k, ty, ex)
       k
+
+    case LambdaExp(params, body) =>
+      ClosureVal(params, None, body, env, List())
     case _ => throw new InterpreterError(s"Type mismatch at exp input for eval, unexpected value $e}", e)
   }
+
   /**
     * Checks whether value `v` has type `ot` (if present), generates runtime type error otherwise.
     */
@@ -222,9 +215,23 @@ object Interpreter {
         case (TupleVal(vs), TupleType(ts)) if vs.length == ts.length =>
           for ((vi, ti) <- vs.zip(ts))
             checkValueType(vi, Some(ti), n)
+        case (ClosureVal(cparams, optcrestype, _, _, defs), FunType(paramtypes, restype)) if cparams.length == paramtypes.length =>
+          for ((p, t) <- cparams.zip(paramtypes))
+            checkTypesEqual(t, p.opttype, n)
+          checkTypesEqual(restype, optcrestype, n)
         case _ =>
           throw new InterpreterError(s"Type mismatch: value ${valueToString(v)} does not match type ${unparse(t)}", n)
       }
+    case None => // do nothing
+  }
+
+  /**
+    * Checks that the types `t1` and `ot2` are equal (if present), throws type error exception otherwise.
+    */
+  def checkTypesEqual(t1: Type, ot2: Option[Type], n: AstNode): Unit = ot2 match {
+    case Some(t2) =>
+      if (t1 != t2)
+        throw new InterpreterError(s"Type mismatch: type ${unparse(t1)} does not match expected type ${unparse(t2)}", n)
     case None => // do nothing
   }
 
@@ -237,18 +244,20 @@ object Interpreter {
     case BoolVal(c) => c.toString
     case StringVal(c) => c
     case TupleVal(vs) => vs.map(v => valueToString(v)).mkString("(", ",", ")")
+    case ClosureVal(params, _, exp, _, defs) => // the resulting string ignores the result type annotation and the declaration environment
+      s"<(${params.map(p => unparse(p)).mkString(",")}), ${unparse(exp)}>"
   }
 
   /**
     * Builds an initial environment, with a value for each free variable in the program.
     */
-  def makeInitialVarEnv(program: Exp): VarEnv = {
-    var venv = Map[Var, Val]()
+  def makeInitialEnv(program: Exp): Env = {
+    var env = Map[Id, Val]()
     for (x <- Vars.freeVars(program)) {
       print(s"Please provide an integer value for the variable $x: ")
-      venv = venv + (x -> IntVal(StdIn.readInt()))
+      env = env + (x -> IntVal(StdIn.readInt()))
     }
-    venv
+    env
   }
 
   /**
@@ -262,5 +271,4 @@ object Interpreter {
     * Exception thrown in case of MiniScala runtime errors.
     */
   class InterpreterError(msg: String, node: AstNode) extends MiniScalaError(s"Runtime error: $msg", node.pos)
-
 }

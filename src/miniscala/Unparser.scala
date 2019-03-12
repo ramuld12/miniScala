@@ -14,7 +14,7 @@ object Unparser {
     case BoolLit(c) => c.toString
     case FloatLit(c) => c.toString
     case StringLit(c) => s"$c"
-    case ValDecl(x: Var, opttype: Option[Type], exp: Exp) => s"val $x : ${unparse(opttype.get)} = ${unparse(exp)} ;"
+    case ValDecl(x: Id, opttype: Option[Type], exp: Exp) => s"val $x : ${unparse(opttype.get)} = ${unparse(exp)} ;"
     case BinOpExp(leftexp, op, rightexp) =>
       val leftval = unparse(leftexp)
       val rightval = unparse(rightexp)
