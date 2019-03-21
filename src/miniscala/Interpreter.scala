@@ -11,11 +11,17 @@ import scala.io.StdIn
 object Interpreter {
 
   sealed abstract class Val
+
   case class IntVal(v: Int) extends Val
+
   case class BoolVal(v: Boolean) extends Val
+
   case class FloatVal(v: Float) extends Val
+
   case class StringVal(v: String) extends Val
+
   case class TupleVal(vs: List[Val]) extends Val
+
   case class ClosureVal(params: List[FunParam], optrestype: Option[Type], body: Exp, env: Env, defs: List[DefDecl]) extends Val
 
   type Env = Map[Id, Val]
@@ -148,15 +154,22 @@ object Interpreter {
         case _ => throw new InterpreterError(s"Type mismatch at 'If/Else', unexpected value ${valueToString(condval)}", e)
       }
     case BlockExp(vals, defs, exp) =>
-      var env1 = env
+      //previous week's solution
+      /*var env1 = env
       for (d <- vals) {
         val v = eval(d.exp, env1)
-        env1 = env1 + (d.x -> v)
-      }
+        env1 = env1 + (d.x -> v)*/
+
+      val env1 = vals.foldRight(env)((d: ValDecl, env: Map[Id,Val]) => {val v = eval(d.exp,env); env + (d.x -> v)}: Map[Id,Val])
+
+      /*
       var env2 = env1
       for (d <- defs)
         env2 += (d.fun -> ClosureVal(d.params, d.optrestype, d.body, env1, defs))
-      eval(exp, env2)
+      eval(exp, env2)*/
+
+      val env2 = defs.foldRight(env1)((d: DefDecl, evn1: Map[Id,Val]) => env1 + (d.fun -> ClosureVal(d.params,d.optrestype,d.body,env1,defs)))
+      eval(exp,env2)
     case TupleExp(exps) =>
       var vals = List[Val]()
       for (exp <- exps)
@@ -179,18 +192,19 @@ object Interpreter {
         case _ => throw new InterpreterError(s"Tuple expected at match, found ${valueToString(expval)}", e)
       }
     case CallExp(funexp, args) =>
+      //throw new InterpreterError(s"Error at ${eval(funexp, env)}, didn't evaluate to a ClosureVal", e)
       val ClosureVal(params, ty, ex, cenv, defs) = eval(funexp, env)
       var nenv = cenv
-      if(params.length == args.length) {
-        for ((p,a) <- params.zip(args)) {
-          val argval = eval(a, env)
-          checkValueType(argval, p.opttype, p)
-          nenv = nenv + (p.x -> argval)
-        }
+      for (d <- defs) {
+        nenv = nenv + (d.fun -> env(d.fun))
       }
       var nnenv = nenv
-      for (d <- defs) {
-        nnenv = nnenv + (d.fun -> env(d.fun))
+      if (params.length == args.length) {
+        for ((p, a) <- params.zip(args)) {
+          val argval = eval(a, env)
+          checkValueType(argval, p.opttype, p)
+          nnenv = nnenv + (p.x -> argval)
+        }
       }
       val k = eval(ex, nnenv)
       checkValueType(k, ty, ex)
@@ -252,14 +266,9 @@ object Interpreter {
     * Builds an initial environment, with a value for each free variable in the program.
     */
   def makeInitialEnv(program: Exp): Env = {
-    var env = Map[Id, Val]()
-    for (x <- Vars.freeVars(program)) {
-      print(s"Please provide an integer value for the variable $x: ")
-      env = env + (x -> IntVal(StdIn.readInt()))
-    }
-    env
+  miniscala.Set.fold(Vars.freeVars(program), Map[Id, Val](),
+    (id: Id, map: Map[Id, Val]) => map + (id -> IntVal(StdIn.readInt())))
   }
-
   /**
     * Prints message if option -trace is used.
     */

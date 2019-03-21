@@ -38,20 +38,18 @@ object Unparser {
         case NotUnOp() => "!" + expval
       }
     case BlockExp(vals: List[ValDecl],defs: List[DefDecl], exp: Exp) =>
+      // Previous week's solution
+      /*
       var res = ""
       for (d <- vals)
         res += unparse(d)
       val y = unparse(exp)
-      s"{$res $y}"
-    case IfThenElseExp(condexp, thenexp, elseexp) => s"(if ($condexp) $thenexp else $elseexp)"
-    case TupleExp(exps) => exps.map(unparse).mkString(",")
-    case MatchExp(exp, cases) =>
-      var x = ""
-      var res = unparse(exp) + s"match {"
-      for (c <- cases) {
-        x = unparse(c)//???
-        res += s"case $x;"}
-      s"$res}"
+      s"{$res $y}"*/
+
+      // New solution
+      val y = unparse(exp)
+      val r = vals.foldRight("")((d: ValDecl, r: String) => {r + unparse(d) + "; "} )
+      s"{$r $y}"
     case _ => ""
   }
 
