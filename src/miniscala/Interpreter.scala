@@ -160,7 +160,7 @@ object Interpreter {
         val v = eval(d.exp, env1)
         env1 = env1 + (d.x -> v)*/
 
-      val env1 = vals.foldRight(env)((d: ValDecl, env: Map[Id,Val]) => {val v = eval(d.exp,env); env + (d.x -> v)}: Map[Id,Val])
+      val env1 = vals.foldLeft(env)((env: Map[Id,Val], d: ValDecl) => {val v = eval(d.exp,env); env + (d.x -> v)}: Map[Id,Val])
 
       /*
       var env2 = env1
@@ -168,7 +168,8 @@ object Interpreter {
         env2 += (d.fun -> ClosureVal(d.params, d.optrestype, d.body, env1, defs))
       eval(exp, env2)*/
 
-      val env2 = defs.foldRight(env1)((d: DefDecl, evn1: Map[Id,Val]) => env1 + (d.fun -> ClosureVal(d.params,d.optrestype,d.body,env1,defs)))
+      val env2 = defs.foldLeft(env1)((evn1: Map[Id,Val],d: DefDecl) => env1 + (d.fun -> ClosureVal(d.params,d.optrestype,d.body,env1,defs)))
+
       eval(exp,env2)
     case TupleExp(exps) =>
       var vals = List[Val]()

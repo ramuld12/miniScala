@@ -20,35 +20,35 @@ object Vars {
     case BlockExp(vals, defs, exp) =>
       var fv = freeVars(exp)
       for (d <- defs)
-        miniscala.Set.union(fv,freeVars(d))
+         fv = miniscala.Set.union(fv,freeVars(d))
       for (d <- defs)
-        miniscala.Set.difference(fv,declaredVars(d))
+        fv = miniscala.Set.difference(fv,declaredVars(d))
       for (d <- vals.reverse)
-        miniscala.Set.difference(fv,miniscala.Set.union(declaredVars(d),freeVars(d)))
+        fv = miniscala.Set.difference(fv,miniscala.Set.union(declaredVars(d),freeVars(d)))
       fv
     case TupleExp(exps) =>
       var fv = miniscala.Set.makeEmpty[Id]()
       for (exp <- exps)
-        miniscala.Set.union(fv,freeVars(exp))
+        fv = miniscala.Set.union(fv,freeVars(exp))
       fv
     case MatchExp(exp, cases) =>
       var fv: Set[Id] = freeVars(exp)
       for (c <- cases) {
         var mset = fv
         for (p <- c.pattern)
-          miniscala.Set.remove[Id](mset,p)
-        miniscala.Set.union(fv, mset)
+          mset = miniscala.Set.remove[Id](mset,p)
+        fv = miniscala.Set.union(fv, mset)
       }
       fv
     case CallExp(funexp, args) =>
       var fv: Set[Id] = freeVars(funexp)
       for (a <- args)
-        miniscala.Set.union(freeVars(a),fv)
+        fv = miniscala.Set.union(freeVars(a),fv)
       fv
     case LambdaExp(params, body) =>
       var fv = freeVars(body)
       for (p <- params.map(p => p.x))
-        miniscala.Set.remove(fv,p)
+        fv = miniscala.Set.remove(fv,p)
       fv
   }
 
@@ -57,7 +57,7 @@ object Vars {
     case DefDecl(_, params, _, body) =>
       var fv: Set[Id] = freeVars(body)
       for (p <- params.map(p => p.x))
-        miniscala.Set.remove(fv,p)
+        fv = miniscala.Set.remove(fv,p)
       fv
   }
 

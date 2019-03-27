@@ -48,7 +48,7 @@ object Unparser {
 
       // New solution
       val y = unparse(exp)
-      val r = vals.foldRight("")((d: ValDecl, r: String) => {r + unparse(d) + "; "} )
+      val r = vals.foldLeft("")((r: String, d: ValDecl) => {r + unparse(d) + "; "} )
       s"{$r $y}"
     case _ => ""
   }
