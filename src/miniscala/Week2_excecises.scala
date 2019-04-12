@@ -1,4 +1,4 @@
-package miniscala
+/*package miniscala
 
 //import org.graalvm.compiler.core.common.util.IntList
 sealed abstract class IntList
@@ -59,3 +59,4 @@ object Week2_excecises {
     println(odd(Cons(1, Cons(2, Cons(5, Cons(4, Cons(9,Cons(1, Cons(2, Cons(5, Cons(4, Cons(9 , Nil))))))))))))
   }
 }
+*/

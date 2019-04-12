@@ -37,7 +37,7 @@ object Unparser {
         case NegUnOp() => "-" + expval
         case NotUnOp() => "!" + expval
       }
-    case BlockExp(vals: List[ValDecl],defs: List[DefDecl], exp: Exp) =>
+    /*case BlockExp(vals: List[ValDecl], vars: List[VarDecl], defs: List[DefDecl], exps: List[Exp]) =>
       // Previous week's solution
       /*
       var res = ""
@@ -47,9 +47,10 @@ object Unparser {
       s"{$res $y}"*/
 
       // New solution
-      val y = unparse(exp)
+      val y = exps.foldLeft("")((y: String, d: Exp) => {y + unparse(d) + "; "} )
       val r = vals.foldLeft("")((r: String, d: ValDecl) => {r + unparse(d) + "; "} )
-      s"{$r $y}"
+      val x = vars.foldLeft("")((x: String, d: VarDecl) => {x + unparse(d) + "; "} )
+      s"{$r $y}"*/
     case _ => ""
   }
 

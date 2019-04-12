@@ -2,7 +2,7 @@
 
 import miniscala.Ast._
 import miniscala.Interpreter._
-import miniscala.TypeChecker.{FunTypeEnv, TypeError, VarTypeEnv, typeCheck}
+import miniscala.TypeChecker._
 import miniscala.parser.Parser.parse
 
 object Test49 {
@@ -41,17 +41,18 @@ object Test49 {
     testTypeFail(prg)
   }
 
-  def testVal(prg: String, value: Val, venv: VarEnv = Map[Var, Val](), fenv: FunEnv = Map[Var, Closure]()) = {
-    assert(eval(parse(prg), venv, fenv) == value)
+  def testVal(prg: String, value: Val, env: Env = Map[Id, Val](), cenv: ClassEnv = Map[Id, Constructor](), sto: Sto = Map[Loc, Val]()) = {
+    val (res, _) = eval(parse(prg), env, cenv, sto)
+    assert(res == value)
   }
 
-  def testType(prg: String, out: Type, venv: VarTypeEnv = Map[Var, Type](), fenv: FunTypeEnv = Map[Var, (List[Type], Type)]()) = {
-    assert(typeCheck(parse(prg), venv, fenv) == out)
+  def testType(prg: String, out: Type, tenv: TypeEnv = Map[Id, Type]()) = {
+    assert(typeCheck(parse(prg), tenv) == out)
   }
 
-  def testValFail(prg: String) = {
+  def testValFail(prg: String,env: Env = Map[Id, Val](), cenv: ClassEnv = Map[Id, Constructor](), sto: Sto = Map[Loc, Val]() ) = {
     try {
-      eval(parse(prg), Map[Var, Val](), Map[Var, Closure]())
+      eval(parse(prg), env, cenv, sto)
       assert(false)
     } catch {
       case _: InterpreterError => assert(true)
@@ -60,7 +61,7 @@ object Test49 {
 
   def testTypeFail(prg: String) = {
     try {
-      typeCheck(parse(prg), Map[Var, Type](), Map[Var, (List[Type], Type)]())
+      typeCheck(parse(prg), Map[Id, Type]())
       assert(false)
     } catch {
       case _: TypeError => assert(true)

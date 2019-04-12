@@ -1,4 +1,4 @@
-package miniscala
+/*package miniscala
 
 object Set {
   sealed abstract class List[T]
@@ -143,3 +143,4 @@ object Set {
     case Cons(y, ys) => foldLeft(ys, f(z, y), f)
   }
 }
+*/

@@ -5,11 +5,37 @@ import miniscala.Interpreter._
 import miniscala.TypeChecker._
 import miniscala.parser.Parser.parse
 
-object Test68 {
+object Test95 {
 
   def main(args: Array[String]): Unit = {
-    testVal("{ def f(x) = x; f(2)}", IntVal(2))
     test("{ def f(x: Int): Int = x; f(2) }", IntVal(2), IntType())
+    testFail("{ def f(x: Int): Int = x; f(2, 3) }")
+    testVal("{ var z: Int = 0; { var t: Int = x; while (y <= t) { z = z + 1; t = t - y }; z } }", IntVal(3), Map("x" -> IntVal(17), "y" -> IntVal(5)))
+    testType("{ var z: Int = 0; { var t: Int = x; while (y <= t) { z = z + 1; t = t - y }; z } }", IntType(), Map("x" -> IntType(), "y" -> IntType()))
+    testVal("{ var x: Int = 0; def inc(): Int = { x = x + 1; x }; inc(); inc() }", IntVal(2))
+    testType("{ var x: Int = 0; def inc(): Int = { x = x + 1; x }; inc(); inc() }", IntType())
+    testVal("""{ def make(a: Int): Int => Int = {
+              |    var c: Int = a;
+              |    def add(b: Int): Int = { c = c + b; c };
+              |    add
+              |  };
+              |  { val c1 = make(100);
+              |    val c2 = make(1000);
+              |    c1(1) + c1(2) + c2(3) } }""".stripMargin, IntVal(101 + 103 + 1003))
+
+    // <-- add more test cases here
+    testVal("{ var x = 5 ; while (x == 5) { x = 4 } ; x }", IntVal(4), Map("x" -> IntVal(5))) //Test for while
+    testVal("{ var x = 5 ; while (x == 5) { x = 4 }}", unitVal, Map("x" -> IntVal(5))) //Test for while, with no return value
+    testValFail("{ var x: Int = 2 ; x = true }") //Test scoping
+    testTypeFail("{ var x: Int = 2 ; x = true }") //Test scoping
+    test("{ var x = 2 ; {var x = true} ; x}", IntVal(2), IntType()) //Test scoping
+    test("{ var x = 2 ; {var x = 0} ; x}", IntVal(2), IntType()) //Test scoping
+    test("{var x = 4 ; x = 3}", unitVal, unitType) //Test scoping, but no return value
+    test("{var x = 4 ; x = 3 ; x}", IntVal(3), IntType()) //Test scoping
+    test("{var x = 4 ; { x = 3 } ; x}", IntVal(3), IntType()) //Test scoping
+    test("{ var z: Int = 0; { var y : Int = 17; var x : Int = 2; var t: Int = 3; while (y <= t) { z = z + 1; t = t - y } }}", unitVal, unitType) //Test scoping
+
+    //Test68
     test("{ def f(x: Int): Int = x+3; f(3) }", IntVal(6), IntType())
     test("{def f(x: Float): Float = x*2.6f; f(1f)}", FloatVal(2.6f), FloatType()) // test for float
     test("{def n(x: Int): Boolean = if (x<0) false else true; n(3)}", BoolVal(true), BoolType())
@@ -17,9 +43,6 @@ object Test68 {
     testFail("{ def f(x: Int): Int = x; f(2, 3) }") //Wrong number of arguments for f
     testFail("{def f(x: Int): Int = x; f(fooo) }") // Wrong type in the function call
     testFail("{ def f(x: Boolean): Int = if(x==2) 2 else 0; f(2) }") // Wrong type test
-    /*test("{ def isEven(n: Int): Boolean = if (n == 0) true else isOdd(n - 1); " +
-      "def isOdd(n: Int): Boolean = if (n == 0) false else isEven(n - 1);" +
-      "isEven(10) }", BoolVal(true), BoolType()) //Test if mutual recursion works*/
     testTypeFail(
       "{ def isEven(n): Boolean = if (n == 0) true else isOdd(n - 1); " +
         "def isOdd(n: Int): Boolean = if (n == 0) false else isEven(n - 1);" +

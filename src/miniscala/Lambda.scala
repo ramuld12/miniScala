@@ -1,4 +1,4 @@
-package miniscala
+/*package miniscala
 
 import miniscala.Ast._
 import miniscala.parser.Parser
@@ -14,7 +14,7 @@ object Lambda {
   val FIX: Exp = Parser.parse("((x)=>(y)=>(y((z)=>x(x)(y)(z))))((x)=>(y)=>(y((z)=>x(x)(y)(z))))")
 
   def main(args: Array[String]): Unit = {
-    assert(decodeNumber(eval(encode(IntLit(0)),Map[Id, Val]())) == 0) //Should return 0
+    /*assert(decodeNumber(eval(encode(IntLit(0)),Map[Id, Val]())) == 0) //Should return 0
     assert(decodeNumber(eval(encode(IntLit(1)),Map[Id, Val]())) == 1) //Should return 1
     assert(decodeNumber(eval(encode(IntLit(2)),Map[Id, Val]())) == 2) //Should return 2
     assert(decodeNumber(eval(encode(UnOpExp(NotUnOp(),IntLit(5))),Map[Id, Val]())) != 5) //Should return true
@@ -24,7 +24,7 @@ object Lambda {
     assert(decodeNumber(eval(encode(Parser.parse("if (!false) 1 else 2")),Map[Id, Val]())) == 1) //Should return 1
     assert(decodeNumber(eval(encode(Parser.parse("{def fac(n: Int): Int = if (n == 0) 1 else n * fac(n - 1);fac(5)}")),Map[Id, Val]())) == 120) //Should return 120
     assert(decodeNumber(eval(encode(Parser.parse("{ val f = (x: Int) => x; f(2)}")),Map[Id, Val]())) == 2) //Should return 2
-    assert(decodeNumber(eval(encode(Parser.parse("{val f = (x: Int) => x * 8; f(8)}")),Map[Id, Val]())) == 64) //Should return 64
+    assert(decodeNumber(eval(encode(Parser.parse("{val f = (x: Int) => x * 8; f(8)}")),Map[Id, Val]())) == 64) //Should return 64*/
   }
 
   def encode(e: Exp): Exp =
@@ -91,9 +91,9 @@ object Lambda {
         CallExp(CallExp(encode(condexp),
           List(LambdaExp(List(FunParam("a", None)), CallExp(encode(thenexp), List(VarExp("a")))))),
           List(LambdaExp(List(FunParam("b", None)), CallExp(encode(elseexp), List(VarExp("b")))))) // mimics call-by-name
-      case BlockExp(List(ValDecl(id, _, e1)), List(), e2: Exp) => // { val x = e1; e2 }, slide 23
-        CallExp(LambdaExp(List(FunParam(id, None)), encode(e2)),List(encode(e1)))
-      case BlockExp(List(), List(DefDecl(f, List(FunParam(x, _)), _, e1)), e2: Exp) => // { def f(x) = e1; e2 }, slide 23
+      case BlockExp(List(ValDecl(id, _, e1)), _, List(), e2:  Exp) => // { val x = e1; e2 }, slide 23
+        CallExp(LambdaExp(List(FunParam(id, None)), encode(e2)), List(encode(e1)))
+      case BlockExp(List(), List(), List(DefDecl(f, List(FunParam(x, _)), _, e1)), e2: Exp) => // { def f(x) = e1; e2 }, slide 23
         CallExp(LambdaExp(List(FunParam(f, None)), encode(e2)),
           List(CallExp(FIX,
             List(LambdaExp(List(FunParam(f, None)), LambdaExp(List(FunParam(x, None)),
@@ -102,10 +102,10 @@ object Lambda {
         LambdaExp(List(FunParam("p", None)),
           CallExp(CallExp(VarExp("p"), List(encode(e1))), List(encode(e2))))
       case MatchExp(mexp, List(MatchCase(List(x, y), caseexp))) => // e1 match { case (x,y) => e2 }, slide 21
-        encode(BlockExp(List(ValDecl("p", None, mexp)), List(),
-          BlockExp(List(ValDecl(x, None, CallExp(VarExp("p"), List(LambdaExp(List(FunParam("x", None)), LambdaExp(List(FunParam("y", None)), VarExp("x"))))))), List(),
-            BlockExp(List(ValDecl(y, None, CallExp(VarExp("p"), List(LambdaExp(List(FunParam("x", None)), LambdaExp(List(FunParam("y", None)), VarExp("y"))))))), List(),
-              caseexp))))
+        encode(BlockExp(List(ValDecl("p", None, mexp)),List(), List(),
+            List(BlockExp(List(ValDecl(x, None, CallExp(VarExp("p"), List(LambdaExp(List(FunParam("x", None)), LambdaExp(List(FunParam("y", None)), VarExp("x"))))))), List(), List(),
+            List(BlockExp(List(ValDecl(y, None, CallExp(VarExp("p"), List(LambdaExp(List(FunParam("x", None)), LambdaExp(List(FunParam("y", None)), VarExp("y"))))))), List(), List(),
+              List(caseexp)))))))
       case CallExp(target, args) => // call expressions are trivial, just encode the arguments recursively
         CallExp(encode(target), args.foldLeft(List[Exp]())((es, a) => encode(a) :: es))
       case LambdaExp(params, body) => // lambdas are trivial, just encode the body recursively
@@ -121,8 +121,8 @@ object Lambda {
         CallExp(CallExp(LambdaExp(params, exp),
           List(LambdaExp(List(FunParam("n", None)), BinOpExp(VarExp("n"), PlusBinOp(), IntLit(1))))),
           List(IntLit(0)))
-      Interpreter.eval(unchurch, env) match {
-        case IntVal(c) => c
+      Interpreter.eval(unchurch, env, _) match {
+        case (IntVal(c), _) => c
         case _ => throw new RuntimeException(s"Unexpected decoded value $v")
       }
     case _ => throw new RuntimeException(s"Unexpected encoded value $v")
@@ -134,8 +134,8 @@ object Lambda {
         CallExp(CallExp(LambdaExp(params, exp),
           List(BoolLit(true))),
           List(BoolLit(false)))
-      Interpreter.eval(unchurch, env) match {
-        case BoolVal(c) => c
+      Interpreter.eval(unchurch, env, _) match {
+        case (BoolVal(c), _) => c
         case _ => throw new RuntimeException(s"Unexpected decoded value $v")
       }
     case _ => throw new RuntimeException(s"Unexpected encoded value $v")
@@ -145,18 +145,19 @@ object Lambda {
     * Builds an initial environment, with a lambda-encoded value for each free variable in the program.
     */
 
-  def makeInitialEnv(program: Exp): Env = {
+  /*def makeInitialEnv(program: Exp): Env = {
     miniscala.Set.fold(Vars.freeVars(program), Map[Id, Val](),
       (id: Id, map: Map[Id, Val]) => map + (id -> Interpreter.eval(encode(IntLit(StdIn.readInt())), Map[Id, Val]())))
-  }
-  /*def makeInitialEnv(program: Exp): Env = {
+  }*/
+  def makeInitialEnv(program: Exp): Env = {
     var env = Map[Id, Val]()
     for (x <- Vars.freeVars(program)) {
       print(s"Please provide an integer value for the variable $x: ")
-      env = env + (x -> Interpreter.eval(encode(IntLit(StdIn.readInt())), Map[Id, Val]()))
+      env = env + (x -> Interpreter.eval(encode(IntLit(StdIn.readInt())), Map[Id, Val](),Map[Loc, Val]))
     }
     env
-  }*/
+  }
 
   class EncoderError(node: AstNode) extends MiniScalaError(s"Don't know how to encode $node", node.pos)
 }
+*/

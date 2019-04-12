@@ -98,6 +98,11 @@ object TypeChecker {
         checkTypesEqual(t, d.opttype, d)
         tenv1 = tenv1 + (d.x -> d.opttype.getOrElse(t))
       }
+      for (d <- vars) {
+        val t = typeCheck(d.exp, tenv1)
+        checkTypesEqual(t, d.opttype, d)
+        tenv1 = tenv1 + (d.x -> RefType(d.opttype.getOrElse(t)))
+      }
       for (d <- defs)
         tenv1 = tenv1 + (d.fun -> getFunType(d))
       for (d <- defs) {
@@ -109,7 +114,11 @@ object TypeChecker {
         val t = typeCheck(d.body, tenv2)
         checkTypesEqual(t, d.optrestype, d.body)
       }
-      typeCheck(exp, tenv1)
+      var res: Type = unitType
+      for (e <- exps){
+        res = typeCheck(e, tenv1)
+      }
+      res
     case TupleExp(exps) => TupleType(exps.map(x => typeCheck(x, tenv)))
     case MatchExp(exp, cases) =>
       val exptype = typeCheck(exp, tenv)
@@ -176,9 +185,16 @@ object TypeChecker {
     * Builds an initial type environment, with a type for each free variable in the program.
     */
   def makeInitialTypeEnv(program: Exp): TypeEnv = {
+    var tenv: TypeEnv = Map()
+    for (x <- Vars.freeVars(program))
+      tenv = tenv + (x -> IntType())
+    tenv
+  }
+  //Solution with our own fold
+  /*def makeInitialTypeEnv(program: Exp): TypeEnv = {
     miniscala.Set.fold(Vars.freeVars(program), Map[Id, Type](),
       (id: Id, map: Map[Id, Type]) => map + (id -> IntType()))
-  }
+  }*/
 
   /**
     * Exception thrown in case of MiniScala type errors.

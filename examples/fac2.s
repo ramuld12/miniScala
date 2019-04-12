@@ -4,6 +4,6 @@
     else n * f(f)(n - 1);
   {
     val fac = fac2(fac2);
-    fac(5)
+    fac(3)
   }
 }
