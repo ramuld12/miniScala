@@ -30,6 +30,8 @@ object Unparser {
         case LessThanOrEqualBinOp() => s"($leftval<=$rightval)"
         case AndBinOp() => s"($leftval&$rightval)"
         case OrBinOp() => s"($leftval|$rightval)"
+        case AndAndBinOp() => s"($leftval&&$rightval)"
+        case OrOrBinOp() => s"($leftval||$rightval)"
       }
     case UnOpExp(op, exp) =>
       val expval = unparse(exp)
@@ -37,6 +39,7 @@ object Unparser {
         case NegUnOp() => "-" + expval
         case NotUnOp() => "!" + expval
       }
+    case DoWhileExp(body, guard) => ???
     /*case BlockExp(vals: List[ValDecl], vars: List[VarDecl], defs: List[DefDecl], exps: List[Exp]) =>
       // Previous week's solution
       /*

@@ -49,7 +49,7 @@ object TypeChecker {
             case (IntType(), IntType()) => BoolType()
             case (FloatType(), FloatType()) => BoolType()
             case (StringType(), StringType()) => BoolType()
-            case (TupleType(x), TupleType(y)) => BoolType()
+            case (TupleType(_), TupleType(_)) => BoolType()
             case _ => throw new TypeError(s"Type mismatch at '$op', unexpected types ${unparse(lefttype)} and ${unparse(righttype)}", op)
           }
         case LessThanBinOp() | LessThanOrEqualBinOp() =>
@@ -65,9 +65,17 @@ object TypeChecker {
             case (BoolType(), BoolType()) => BoolType()
             case _ => throw new TypeError(s"Type mismatch at '$op', unexpected types ${unparse(lefttype)} and ${unparse(righttype)}", op)
           }
+        case AndAndBinOp() | OrOrBinOp() =>
+          lefttype match {
+            case BoolType() => righttype match {
+              case BoolType() => BoolType()
+              case _ => throw new TypeError(s"Type mismatch at '$op', unexpected type ${unparse(righttype)}", op)
+            }
+            case _ => throw new TypeError(s"Type mismatch at '$op', unexpected type ${unparse(lefttype)}", op)
+          }
       }
     case UnOpExp(op, exp) =>
-      val exptype = typeCheck(exp, tenv)
+      val exptype = typeCheck(exp, tenv, ctenv)
       op match {
         case NegUnOp() =>
           exptype match {
@@ -82,10 +90,10 @@ object TypeChecker {
           }
       }
     case IfThenElseExp(condexp, thenexp, elseexp) =>
-      val condtype = typeCheck(condexp, tenv)
+      val condtype = typeCheck(condexp, tenv, ctenv)
       condtype match {
         case BoolType() =>
-          (typeCheck(thenexp, tenv), typeCheck(elseexp, tenv)) match {
+          (typeCheck(thenexp, tenv, ctenv), typeCheck(elseexp, tenv, ctenv)) match {
             case (x, y) if x == y => x
             case _ => throw new TypeError(s"Type mismatch at '$condexp', unexpected type ${unparse(condexp)}", e)
           }
@@ -99,9 +107,10 @@ object TypeChecker {
         tenv1 = tenv1 + (d.x -> d.opttype.getOrElse(t))
       }
       for (d <- vars) {
-        val t = typeCheck(d.exp, tenv1)
-        checkTypesEqual(t, d.opttype, d)
-        tenv1 = tenv1 + (d.x -> RefType(d.opttype.getOrElse(t)))
+        val t = typeCheck(d.exp, tenv1, ctenv)
+        val ot = getType(d.opttype, ctenv, d)
+        checkSubtype(t, ot, d)
+        tenv1 = tenv1 + (d.x -> RefType(ot.getOrElse(t)))
       }
       for (d <- defs)
         tenv1 = tenv1 + (d.fun -> getFunType(d))
@@ -111,15 +120,28 @@ object TypeChecker {
           val paramtype = param.opttype.getOrElse(throw new TypeError(s"Error in ${d.fun}, can't acces ${param.opttype}", e))
           tenv2 = tenv2 + (param.x -> paramtype)
         }
-        val t = typeCheck(d.body, tenv2)
-        checkTypesEqual(t, d.optrestype, d.body)
+        val t = typeCheck(d.body, tenv2, ctenv)
+        val ot = getType(d.optrestype, ctenv, d)
+        checkSubtype(t, ot, d.body)
+      }
+      var ctenv1 = ctenv
+      for (d <- classes) {
+        ctenv1 = ctenv1 + (d.klass -> getConstructorType(d, ctenv, classes))
+      }
+      for (d <- classes) {
+        var tenv2 = tenv1
+        for (param <- d.params) {
+          val paramtype = param.opttype.getOrElse(throw new TypeError(s"Error in ${d.klass}, can't acces ${param.opttype}", e))
+          tenv2 = tenv2 + (param.x -> paramtype)
+        }
+        typeCheck(d.body, tenv2, ctenv1)
       }
       var res: Type = unitType
-      for (e <- exps){
-        res = typeCheck(e, tenv1)
+      for (e <- exps) {
+        res = typeCheck(e, tenv1, ctenv1)
       }
       res
-    case TupleExp(exps) => TupleType(exps.map(x => typeCheck(x, tenv)))
+    case TupleExp(exps) => TupleType(exps.map(x => typeCheck(x, tenv, ctenv)))
     case MatchExp(exp, cases) =>
       val exptype = typeCheck(exp, tenv)
       exptype match {
@@ -130,26 +152,24 @@ object TypeChecker {
               for ((x, y) <- ts.zip(c.pattern)) {
                 tenv1 = tenv1 + (y -> x)
               }
-              return typeCheck(c.exp, tenv1)
+              return typeCheck(c.exp, tenv1, ctenv)
             }
           }
           throw new TypeError(s"No case matches type ${unparse(exptype)}", e)
         case _ => throw new TypeError(s"Tuple expected at match, found ${unparse(exptype)}", e)
       }
     case CallExp(funexp, args) =>
-      val fargstype = typeCheck(funexp, tenv)
+      val fargstype = typeCheck(funexp, tenv, ctenv)
       fargstype match {
-        case FunType(x, y) =>
-          if (x.length == args.length) {
+        case FunType(paramtype, res) =>
+          if (paramtype.length == args.length) {
             for (a <- args) {
-              val argtype = typeCheck(a, tenv)
-              for (ty <- x) {
-                if (argtype != ty) {
-                  throw new TypeError(s"The function's parameter type and result type are not the same in function call", e)
-                }
+              val argtype = typeCheck(a, tenv, ctenv)
+              for (ty <- paramtype) {
+                checkSubtype(ty, argtype, funexp)
               }
             }
-            y
+            res
           }
           else throw new TypeError(s"Unequal number of arguments between ${unparse(funexp)} and $args", e)
         case _ => fargstype
@@ -182,6 +202,46 @@ object TypeChecker {
   }
 
   /**
+    * Checks whether `t1` is a subtype of `t2`.
+    */
+  def subtype(t1: Type, t2: Type): Boolean = {
+    if (t1 == t2) true else {
+      (t1, t2) match {
+        case (IntType(), FloatType()) | (NullType(), ClassType(_)) => true
+        case (TupleType(t1List), TupleType(t2List)) =>
+          if (t1List.length != t2List.length) false else {
+            for ((type1, type2) <- t1List.zip(t2List)) {
+              if (!subtype(type1, type2)) return false
+            }
+            true
+          }
+        case (FunType(paramt1, rest1), FunType(paramt2, rest2)) =>
+          if (paramt1.length != paramt2.length) false else {
+            for ((paramtype1, paramtype2) <- paramt1.zip(paramt2)) {
+              if (!subtype(paramtype1, paramtype2)) return false
+            }
+            if (!subtype(rest1, rest2)) false else true
+          }
+        case _ => false
+      }
+    }
+  }
+
+  /**
+    * Checks whether `t1` is a subtype of `t2`, generates type error otherwise.
+    */
+  def checkSubtype(t1: Type, t2: Type, n: AstNode): Unit =
+    if (!subtype(t1, t2)) throw new TypeError(s"Type mismatch: type ${unparse(t1)} is not subtype of ${unparse(t2)}", n)
+
+  /**
+    * Checks whether `t1` is a subtype of `ot2` (if present), generates type error otherwise.
+    */
+  def checkSubtype(t: Type, ot2: Option[Type], n: AstNode): Unit = ot2 match {
+    case Some(t2) => checkSubtype(t, t2, n)
+    case None => // do nothing
+  }
+
+  /**
     * Builds an initial type environment, with a type for each free variable in the program.
     */
   def makeInitialTypeEnv(program: Exp): TypeEnv = {
@@ -190,6 +250,7 @@ object TypeChecker {
       tenv = tenv + (x -> IntType())
     tenv
   }
+
   //Solution with our own fold
   /*def makeInitialTypeEnv(program: Exp): TypeEnv = {
     miniscala.Set.fold(Vars.freeVars(program), Map[Id, Type](),

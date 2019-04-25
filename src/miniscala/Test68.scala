@@ -60,8 +60,8 @@ object Test68 {
     assert(res == value)
   }
 
-  def testType(prg: String, out: Type, tenv: TypeEnv = Map[Id, Type]()) = {
-    assert(typeCheck(parse(prg), tenv) == out)
+  def testType(prg: String, out: Type, tenv: TypeEnv = Map[Id, Type](), ctenv: ClassTypeEnv = Map[Id, ConstructorType]()) = {
+    assert(typeCheck(parse(prg), tenv, ctenv) == out)
   }
 
   def testValFail(prg: String,env: Env = Map[Id, Val](), cenv: ClassEnv = Map[Id, Constructor](), sto: Sto = Map[Loc, Val]() ) = {
@@ -75,7 +75,7 @@ object Test68 {
 
   def testTypeFail(prg: String) = {
     try {
-      typeCheck(parse(prg), Map[Id, Type]())
+      typeCheck(parse(prg), Map[Id, Type](), Map[Id, ConstructorType]())
       assert(false)
     } catch {
       case _: TypeError => assert(true)

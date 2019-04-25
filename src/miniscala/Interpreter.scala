@@ -130,6 +130,16 @@ object Interpreter {
             case (BoolVal(v1), BoolVal(v2)) => (BoolVal(v1 | v2), sto2)
             case _ => throw new InterpreterError(s"Type mismatch at '|', unexpected values ${valueToString(leftval)} and ${valueToString(rightval)}", op)
           }
+        case AndAndBinOp() =>
+          (leftval, rightval) match {
+            case (BoolVal(v1), BoolVal(v2)) => (BoolVal(v1 && v2), sto1)
+            case _ => throw new InterpreterError(s"Type mismatch at '&', unexpected values ${valueToString(leftval)} and ${valueToString(rightval)}", op)
+          }
+        case OrOrBinOp() =>
+          (leftval, rightval) match {
+            case (BoolVal(v1), BoolVal(v2)) => (BoolVal(v1 || v2), sto1)
+            case _ => throw new InterpreterError(s"Type mismatch at '|', unexpected values ${valueToString(leftval)} and ${valueToString(rightval)}", op)
+          }
       }
     case UnOpExp(op, exp) =>
       val expval = eval(exp, env)
@@ -147,7 +157,7 @@ object Interpreter {
           }
       }
     case IfThenElseExp(condexp, thenexp, elseexp) =>
-      val (condval,sto1) = eval(condexp, env, cenv, sto)
+      val (condval, sto1) = eval(condexp, env, cenv, sto)
       condval match {
         case BoolVal(true) => eval(thenexp, env, cenv, sto1)
         case BoolVal(false) => eval(elseexp, env, cenv, sto1)
@@ -180,23 +190,28 @@ object Interpreter {
         case _ => throw new InterpreterError(s"Tuple expected at match, found ${valueToString(expval)}", e)
       }
     case CallExp(funexp, args) => trace("Function call")
-      val (ClosureVal(params, ty, ex, closureenv, ccenv), sto1) = eval(funexp, env, cenv, sto); trace(s"Evaluate the function exp and save it's closure in a new store")
+      val (ClosureVal(params, ty, ex, closureenv, ccenv), sto1) = eval(funexp, env, cenv, sto);
+      trace(s"Evaluate the function exp and save it's closure in a new store")
       /*var (nenv, sto2) = (cenv, sto1)
       for (d <- defs) { Mutual recursion
         var (ClosureVal(params1, ty1, ex1, ncenv, defs), sto1) = eval(d.body, nenv, sto2)
         nenv = nenv + (d.fun -> env(d.fun))
       }*/
-      var (nnenv, sto2) = (closureenv, sto1); trace("New environment and store created")
+      var (nnenv, sto2) = (closureenv, sto1);
+      trace("New environment and store created")
       if (params.length == args.length) {
         for ((p, a) <- params.zip(args)) {
           val argval = eval(a, env, cenv, sto1); trace("Evaluate all arguments in the function")
-          checkValueType(argval._1, p.opttype, p); trace("Check the types for the current argument and parameter are equivalent")
+          checkValueType(argval._1, getType(p.opttype, cenv), p); trace("Check the types for the current argument and parameter are equivalent")
           nnenv = nnenv + (p.x -> argval._1); trace("Update the environment with the parameters identifier is bound to the arguments value")
         }
       }
-      val k = eval(ex, nnenv, ccenv, sto2); trace("Evaluate the closures expression in the new environment")
-      checkValueType(k._1, ty, ex); trace("Check the return value's type is equivalent to the closure's type")
-      trace("Return the new value and store"); k
+      val k = eval(ex, nnenv, ccenv, sto2);
+      trace("Evaluate the closures expression in the new environment")
+      checkValueType(k._1, getType(ty, cenv), ex);
+      trace("Check the return value's type is equivalent to the closure's type")
+      trace("Return the new value and store");
+      k
 
     case LambdaExp(params, body) =>
       ClosureVal(params, None, body, env, List())
@@ -233,7 +248,11 @@ object Interpreter {
   def checkTypesEqual(t1: Type, ot2: Option[Type], n: AstNode): Unit = ot2 match {
     case Some(t2) =>
       if (t1 != t2)
-        throw new InterpreterError(s"Type mismatch: type ${unparse(t1)} does not match expected type ${unparse(t2)}", n)
+        throw new InterpreterError(s"Type mismatch: type ${
+          unparse(t1)
+        } does not match expected type ${
+          unparse(t2)
+        }", n)
     case None => // do nothing
   }
 
@@ -246,8 +265,15 @@ object Interpreter {
     case BoolVal(c) => c.toString
     case StringVal(c) => c
     case TupleVal(vs) => vs.map(v => valueToString(v)).mkString("(", ",", ")")
-    case ClosureVal(params, _, exp, _, defs) => // the resulting string ignores the result type annotation and the declaration environment
-      s"<(${params.map(p => unparse(p)).mkString(",")}), ${unparse(exp)}>"
+    case ClosureVal(params, _, exp, _, _) => // the resulting string ignores the result type annotation, the declaration environment, and the set of classes
+      s"<(${
+        params.map(p => unparse(p)).mkString(",")
+      }), ${
+        unparse(exp)
+      }>"
+    case RefVal(loc, _) => s"#$loc" // the resulting string ignores the type annotation
+    case null => s"null"
+    case ObjectVal(_) => "object" // (unreachable case)
   }
 
   /**
@@ -265,6 +291,7 @@ object Interpreter {
     }
     env
   }
+
   /**
     * Prints message if option -trace is used.
     */
@@ -276,4 +303,5 @@ object Interpreter {
     * Exception thrown in case of MiniScala runtime errors.
     */
   class InterpreterError(msg: String, node: AstNode) extends MiniScalaError(s"Runtime error: $msg", node.pos)
+
 }
