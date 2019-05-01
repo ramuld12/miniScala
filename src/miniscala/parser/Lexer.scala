@@ -73,7 +73,7 @@ object Lexer extends RegexParsers {
 
   private def literalNull = positioned { """null\b""".r ^^ { lit => NULL() } }
 
-  private def op = positioned { """\+|\*|-|/|<=|==|<|%|!|\||&|\|\||\&\&|max""".r ^^ { lit => OP(lit) } }
+  private def op = positioned { """\+|\*|-|/|<=|==|<|%|!|\|\||\&\&|\||&|max""".r ^^ { lit => OP(lit) } }
 
   private def simpleType = positioned { """(String|Int|Float|Boolean|Unit|Null)\b""".r ^^ { lit => SIMPLE_TYPE(lit) } }
 
