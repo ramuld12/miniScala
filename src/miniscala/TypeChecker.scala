@@ -113,11 +113,11 @@ object TypeChecker {
         tenv1 = tenv1 + (d.x -> RefType(ot.getOrElse(t)))
       }
       for (d <- defs)
-        tenv1 = tenv1 + (d.fun -> getFunType(d))
+        tenv1 = tenv1 + (d.fun -> getType(getFunType(d), ctenv))
       for (d <- defs) {
         var tenv2 = tenv1
         for (param <- d.params) {
-          val paramtype = param.opttype.getOrElse(throw new TypeError(s"Error in ${d.fun}, can't acces ${param.opttype}", e))
+          val paramtype = getType(param.opttype.getOrElse(throw new TypeError(s"Error in ${d.fun}, can't acces ${param.opttype}", e)), ctenv)
           tenv2 = tenv2 + (param.x -> paramtype)
         }
         val t = typeCheck(d.body, tenv2, ctenv)
@@ -131,7 +131,7 @@ object TypeChecker {
       for (d <- classes) {
         var tenv2 = tenv1
         for (param <- d.params) {
-          val paramtype = param.opttype.getOrElse(throw new TypeError(s"Error in ${d.klass}, can't acces ${param.opttype}", e))
+          val paramtype = getType(param.opttype.getOrElse(throw new TypeError(s"Error in ${d.klass}, can't acces ${param.opttype}", e)), ctenv1)
           tenv2 = tenv2 + (param.x -> paramtype)
         }
         typeCheck(d.body, tenv2, ctenv1)
@@ -207,7 +207,7 @@ object TypeChecker {
   def subtype(t1: Type, t2: Type): Boolean = {
     if (t1 == t2) true else {
       (t1, t2) match {
-        case (IntType(), FloatType()) | (NullType(), ClassType(_)) => true
+        case (IntType(), FloatType()) | (NullType(), ConstructorType(_, _, _)) => true
         case (TupleType(t1List), TupleType(t2List)) =>
           if (t1List.length != t2List.length) false else {
             for ((type1, type2) <- t1List.zip(t2List)) {

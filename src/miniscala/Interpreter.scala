@@ -130,24 +130,32 @@ object Interpreter {
             case (BoolVal(v1), BoolVal(v2)) => (BoolVal(v1 | v2), sto2)
             case _ => throw new InterpreterError(s"Type mismatch at '|', unexpected values ${valueToString(leftval)} and ${valueToString(rightval)}", op)
           }
-        case AndAndBinOp() =>
-          (leftval, rightval) match {
-            case (BoolVal(v1), BoolVal(v2)) => (BoolVal(v1 && v2), sto1)
-            case _ => throw new InterpreterError(s"Type mismatch at '&', unexpected values ${valueToString(leftval)} and ${valueToString(rightval)}", op)
+        case AndAndBinOp() => leftval match {
+          case BoolVal(false) => (BoolVal(false), sto1)
+          case BoolVal(true) => rightval match {
+            case BoolVal(true) => (BoolVal(true), sto1)
+            case BoolVal(false) => (BoolVal(false), sto1)
+            case _ => throw new InterpreterError(s"Type mismatch at '&&', unexpected value ${valueToString(rightval)}", op)
           }
-        case OrOrBinOp() =>
-          (leftval, rightval) match {
-            case (BoolVal(v1), BoolVal(v2)) => (BoolVal(v1 || v2), sto1)
-            case _ => throw new InterpreterError(s"Type mismatch at '|', unexpected values ${valueToString(leftval)} and ${valueToString(rightval)}", op)
+          case _ => throw new InterpreterError(s"Type mismatch at '&&', unexpected value ${valueToString(leftval)}", op)
+        }
+        case OrOrBinOp() => leftval match {
+          case BoolVal(true) => (BoolVal(true), sto1)
+          case BoolVal(false) => rightval match {
+            case BoolVal(true) => (BoolVal(true), sto1)
+            case BoolVal(false) => (BoolVal(false), sto1)
+            case _ => throw new InterpreterError(s"Type mismatch at '||', unexpected value ${valueToString(rightval)}", op)
           }
+          case _ => throw new InterpreterError(s"Type mismatch at '||', unexpected value ${valueToString(leftval)}", op)
+        }
       }
     case UnOpExp(op, exp) =>
-      val expval = eval(exp, env)
+      val (expval, sto1) = eval(exp, env, cenv, sto)
       op match {
         case NegUnOp() =>
           expval match {
-            case IntVal(v) => IntVal(-v)
-            case FloatVal(v) => FloatVal(-v)
+            case IntVal(v) => (IntVal(-v), sto1)
+            case FloatVal(v) => (FloatVal(-v), sto1)
             case _ => throw new InterpreterError(s"Type mismatch at '-', unexpected value ${valueToString(expval)}", op)
           }
         case NotUnOp() =>
@@ -167,12 +175,15 @@ object Interpreter {
       val (res, _, sto1) = evalBlock(b, env, cenv, sto)
       (res, sto1)
     case TupleExp(exps) =>
-      var vals = List[Val]()
-      for (exp <- exps)
-        vals = eval(exp, env) :: vals
-      TupleVal(vals.reverse)
+      var (vals, sto1) = (List[Val](), sto)
+      for (exp <- exps) {
+        val (v, sto2) = eval(exp, env, cenv, sto1)
+        vals = v :: vals
+        sto1 = sto2
+      }
+      (TupleVal(vals.reverse), sto1)
     case MatchExp(exp, cases) =>
-      val expval = eval(exp, env)
+      val (expval, sto1) = eval(exp, env, cenv, sto)
       expval match {
         case TupleVal(vs) =>
           for (c <- cases) {
@@ -214,9 +225,178 @@ object Interpreter {
       k
 
     case LambdaExp(params, body) =>
-      ClosureVal(params, None, body, env, List())
+      (ClosureVal(params, None, body, env, cenv), sto)
+    case AssignmentExp(x, exp) =>
+      val (v, sto1) = eval(exp, env, cenv, sto)
+      env.getOrElse(x, throw new InterpreterError(s"Unknown identifier '$x'", e)) match {
+        case RefVal(loc, t) =>
+          val sto2 = sto1 + (loc -> v)
+          checkValueType(v, t, e)
+          (unitVal, sto2)
+        case _ => throw new InterpreterError(s"RefVal expected for assignment, got $x", e)
+      }
+    case WhileExp(cond, body) =>
+      eval(cond, env, cenv, sto) match {
+        case (BoolVal(false), sto1) => (unitVal, sto1)
+        case (BoolVal(true), sto1) =>
+          val (_, sto2) = eval(body, env, cenv, sto1)
+          eval(e, env, cenv, sto2)
+      }
+    case DoWhileExp(body, guard) =>
+      val (_, sto1) = eval(body, env, cenv, sto)
+      eval(guard, env, cenv, sto) match {
+        case (BoolVal(true), sto2) => eval(e, env, cenv, sto2)
+        case (BoolVal(false), sto2) => (unitVal, sto2)
+        case _ => throw new InterpreterError(s"Expected Boolean condition}", e)
+      }
+    case NewObjExp(klass, args) =>
+      trace("New object Exp. Check if the class name is known")
+      val c = cenv.getOrElse(klass, throw new InterpreterError(s"Unknown class name '$klass'", e))
+      val declcenv1 = rebindClasses(c.env, c.cenv, c.classes) //Trace statement already present in method
+    val (declenv1, sto1) = evalArgs(args, c.params, env, sto, cenv, c.env, declcenv1, e) //Trace statement already present in method
+    val (_, env1, sto2) = evalBlock(c.body, declenv1, declcenv1, sto1) //Trace statement already present in method
+    val newloc = nextLoc(sto2);
+      trace("Lookup in the store from the block evaluation and save the unused location in a val")
+      val objenv = env1.filterKeys(p => c.body.defs.exists(d => d.fun == p) || c.body.vars.exists(d => d.x == p) || c.body.vals.exists(d => d.x == p))
+      trace("New environment created, where each DefDecl, VarDecl or ValDecl from the block is bound to it's respective identifiers")
+      val sto3 = sto2 + (newloc -> ObjectVal(objenv));
+      trace("Create a new store where the location maps to a function restricted to the domain the objects env")
+      trace("Reference to the new object in the new store returned");
+      (RefVal(newloc, Some(ClassDeclType(c.srcpos))), sto3)
+    case LookupExp(objexp, member) =>
+      trace("LookupExp")
+      val (objval, sto1) = eval(objexp, env, cenv, sto);
+      trace("Evaluating the objectExp")
+      objval match {
+        case RefVal(loc, _) =>
+          trace("Evaluated to a RefVal. Lookup in the store")
+          if (loc == -1) throw new InterpreterError("null pointer exception", e)
+          sto1(loc) match {
+            case ObjectVal(members) =>
+              trace("Lookup was an ObjectVal. Check if the location holds an environment. Return location and store if it does, else return the value and store")
+              (getValue(members.getOrElse(member, throw new InterpreterError(s"No such member: $member", e)), sto1), sto1)
+            case v => throw new InterpreterError(s"Base value of lookup is not a reference to an object: ${valueToString(v)}", e)
+          }
+        case _ => throw new InterpreterError(s"Base value of lookup is not a location: ${valueToString(objval)}", e)
+      }
     case _ => throw new InterpreterError(s"Type mismatch at exp input for eval, unexpected value $e}", e)
   }
+
+  /**
+    * Evaluates the given block.
+    * Returns the resulting value, the updated environment after evaluating all declarations, and the latest store.
+    */
+  def evalBlock(b: BlockExp, env: Env, cenv: ClassEnv, sto: Sto): (Val, Env, Sto) = {
+    trace("Block Exp")
+    var env1 = env
+    var sto1 = sto;
+    trace("New environment and store created. Now running through each ValDecl")
+    for (d <- b.vals) {
+      val (v, sto2) = eval(d.exp, env1, cenv, sto1); trace("Evaluating a ValDecl")
+      val ot = getType(d.opttype, cenv)
+      checkValueType(v, ot, d.exp);; trace("Checking the type for the value and the ValDecl are equivalent")
+      env1 = env1 + (d.x -> v); trace("Binding the identifier to the value from the evaluation")
+      sto1 = sto2
+    }
+    trace("Now running through each VarDecl")
+    for (d <- b.vars) {
+      val (v, sto2) = eval(d.exp, env, cenv, sto1); trace("Evaluating a VarDecl")
+      val ot = getType(d.opttype, cenv)
+      checkValueType(v, ot, d.exp); trace("Checking the type for the value and the VarDecl are equivalent")
+      val loc = nextLoc(sto2); trace("Lookup in the store from the evaluation and save the unused location in a val")
+      val sto3 = sto2 + (loc -> v); trace("Binding the location to the current value")
+      env1 = env1 + (d.x -> RefVal(loc, ot)); trace("Updated the new environment with the identifier bound to a RefVal given the location and type for the var")
+      sto1 = sto3
+    }
+    var env2 = env1;
+    trace("New environment created. Running through each DefDecl")
+    for (d <- b.defs) {
+      env2 = env2 + (d.fun -> ClosureVal(d.params, d.optrestype, d.body, env1, cenv)); trace("Updated the new environment with a function bound to it's closure")
+    }
+    var cenv1 = cenv;
+    trace("New class environment created. Running through each ClassDecl")
+    for (d <- b.classes) {
+      cenv1 = cenv1 + (d.klass -> Constructor(d.params, d.body, env2, cenv, b.classes, d.pos)); trace("Updated the new class environment with a class bound to it's constructor")
+    }
+    var res: Val = unitVal;
+    trace("Empty result tuple for expressions in the block created. Running through each expression")
+    for (exp <- b.exps) {
+      val (res1, sto2) = eval(exp, env2, cenv1, sto1); trace("Evaluating an expression")
+      res = res1; trace("Result tuple updated with an expression")
+      sto1 = sto2
+    }
+    trace("Return evaluated expression, updated environment and store");
+    (res, env2, sto1)
+  }
+
+  /**
+    * Evaluates the arguments `args` in environment `env` with store `sto`,
+    * extends the environment `declenv` with the new bindings, and
+    * returns the extended environment and the latest store.
+    */
+  def evalArgs(args: List[Exp], params: List[FunParam], env: Env, sto: Sto, cenv: ClassEnv, declenv: Env, declcenv: ClassEnv, e: Exp): (Env, Sto) = {
+    trace("Evaluating arguments")
+    if (args.length != params.length) throw new InterpreterError("Wrong number of arguments at call/new", e)
+    var (env1, sto1) = (declenv, sto);
+    trace("New environment created with a store connected")
+    trace("Running through each function parameter and function argument zipped")
+    for ((p, arg) <- params.zip(args)) {
+      val (argval, sto2) = eval(arg, env, cenv, sto1); trace("Evaluate current argument and save in store")
+      checkValueType(argval, getType(p.opttype, declcenv), arg); trace("Checking if type from the evaluation and the expected type from the parameter are equivalent")
+      env1 = env1 + (p.x -> argval); trace("Updating the environment where the parameters identifier is bound to the current value")
+      sto1 = sto2
+    }
+    trace("Environment and store with the evaluated expressions returned");
+    (env1, sto1)
+  }
+
+  /**
+    * If `v` is a reference to an object or it is a non-reference value, then return `v` itself;
+    * otherwise, it must be a reference to a non-object value, so return that value.
+    */
+  def getValue(v: Val, sto: Sto): Val = v match {
+    case RefVal(loc, _) =>
+      if (loc == -1) {
+        v
+      } else {
+        trace("Found a RefVal as value. Looking up the location in the store")
+        sto(loc) match {
+          case _: ObjectVal => trace("Location holds an ObjectVal, return it"); v
+          case stoval => trace("Location holds a stoval, return it"); stoval
+        }
+      }
+    case null => v
+    case _ => trace("Getting the value. Value is not a RefVal, so simply returning the value"); v
+  }
+
+  /**
+    * Rebinds `classes` in `cenv` to support recursive class declarations.
+    */
+  def rebindClasses(env: Env, cenv: ClassEnv, classes: List[ClassDecl]): ClassEnv = {
+    trace("Rebinding classes")
+    var cenv1 = cenv
+    trace("Updating the e nvironment where each class is bound to it's constructor")
+    for (d <- classes)
+      cenv1 = cenv1 + (d.klass -> Constructor(d.params, d.body, env, cenv, classes, d.pos))
+    trace("Return the updated environment");
+    cenv1
+  }
+
+  /**
+    * Returns the proper type for the type annotation `ot` (if present).
+    * Class names are converted to proper types according to the class environment `cenv`.
+    */
+  def getType(ot: Option[Type], cenv: ClassEnv): Option[Type] = ot.map(t => {
+    def getType(t: Type): Type = t match {
+      case ClassType(klass) => ClassDeclType(cenv.getOrElse(klass, throw new InterpreterError(s"Unknown class '$klass'", t)).srcpos)
+      case IntType() | BoolType() | FloatType() | StringType() | NullType() => t
+      case TupleType(ts) => TupleType(ts.map(getType))
+      case FunType(paramtypes, restype) => FunType(paramtypes.map(getType), getType(restype))
+      case _ => throw new RuntimeException(s"Unexpected type $t") // this case is unreachable
+    }
+
+    getType(t)
+  })
 
   /**
     * Checks whether value `v` has type `ot` (if present), generates runtime type error otherwise.
@@ -232,10 +412,14 @@ object Interpreter {
         case (TupleVal(vs), TupleType(ts)) if vs.length == ts.length =>
           for ((vi, ti) <- vs.zip(ts))
             checkValueType(vi, Some(ti), n)
-        case (ClosureVal(cparams, optcrestype, _, _, defs), FunType(paramtypes, restype)) if cparams.length == paramtypes.length =>
+        case (ClosureVal(cparams, optcrestype, _, _, cenv), FunType(paramtypes, restype)) if cparams.length == paramtypes.length =>
           for ((p, t) <- cparams.zip(paramtypes))
-            checkTypesEqual(t, p.opttype, n)
-          checkTypesEqual(restype, optcrestype, n)
+            checkTypesEqual(t, getType(p.opttype, cenv), n)
+          checkTypesEqual(restype, getType(optcrestype, cenv), n)
+        case (RefVal(_, Some(vd: ClassDeclType)), td: ClassDeclType) =>
+          if (vd != td)
+            throw new InterpreterError(s"Type mismatch: object of type ${unparse(vd)} does not match type ${unparse(td)}", n)
+        case (RefVal(-1, _), ClassDeclType(_)) => // do nothing
         case _ =>
           throw new InterpreterError(s"Type mismatch: value ${valueToString(v)} does not match type ${unparse(t)}", n)
       }

@@ -5,6 +5,5 @@
       else f(n - 1, n * acc);
     f(n, 1)
   };
-
   fac(5)
 }
