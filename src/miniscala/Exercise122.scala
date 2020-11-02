@@ -83,6 +83,17 @@ object Exercise122 {
         .foldRight(() => 0, (x: Int, res: () => Int) => x + res())
     println(s"Elephant sightings: $elephants2")
 
+    val elephants3: Int =
+      sightings.filter(s => { println("filtering"); s.animal == "Elephant" })
+        .map(s => { println("counting"); s.count })
+        .foldRight(0, (x: Int, res: Int) => { println("adding"); x + res})
+    println(s"Elephant sightings: $elephants3")
+
+    val elephants4: Int =
+      listToStream(sightings).filter(s => { println("filtering"); s.animal == "Elephant" })
+        .map(s => { println("counting"); s.count})
+        .foldRight(() => 0, (x: Int, res: () => Int) => { val t = res(); println("adding"); x + t})
+    println(s"Elephant sightings: $elephants4")
   }
   /**
     * Lists.

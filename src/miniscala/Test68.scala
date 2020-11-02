@@ -45,6 +45,8 @@ object Test68 {
     test("{val f = (x: Int) => if (x<0) false else true; f(8)}", BoolVal(true),BoolType())
   }
 
+
+
   def test(prg: String, rval: Val, rtype: Type) = {
     testVal(prg, rval)
     testType(prg, rtype)
