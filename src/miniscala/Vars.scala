@@ -116,11 +116,25 @@ object Vars {
       for (p <- params.map(p => p.x))
         fv = miniscala.Set.remove(fv,p)
       fv
+    case AssignmentExp(x, exp) => miniscala.Set.add(freeVars(exp), x)//hvordan gøres dette?
+    case WhileExp(guard, body) => miniscala.Set.union(freeVars(guard), freeVars(body))
+    case NewObjExp(klass, args) =>
+      var fv = Set[Id]()
+      for (a <- args)
+        fv = miniscala.Set.union(fv, freeVars(a))
+      fv
+    case LookupExp(objexp, _) => freeVars(objexp)
   }
 
   def freeVars(decl: Decl): Set[Id] = decl match {
     case ValDecl(_, _, exp) => freeVars(exp)
+    case VarDecl(_, _, exp) => freeVars(exp)
     case DefDecl(_, params, _, body) =>
+      var fv: Set[Id] = freeVars(body)
+      for (p <- params.map(p => p.x))
+        fv = miniscala.Set.remove(fv,p)
+      fv
+    case ClassDecl(_, params, body) =>
       var fv: Set[Id] = freeVars(body)
       for (p <- params.map(p => p.x))
         fv = miniscala.Set.remove(fv,p)
@@ -129,6 +143,9 @@ object Vars {
 
   def declaredVars(decl: Decl): Set[Id] = decl match {
     case ValDecl(x, _, _) => miniscala.Set.add(makeEmpty(), x)
+    case VarDecl(x, _, _) => miniscala.Set.add(makeEmpty(), x)
     case DefDecl(x, _, _, _) => miniscala.Set.add(makeEmpty(), x)
+    case ClassDecl(_, _, _) => miniscala.Set.makeEmpty() // (case not used)
+
   }
 }*/

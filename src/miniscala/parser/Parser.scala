@@ -212,7 +212,8 @@ object Parser extends PackratParsers {
     strliteral ^^ { lit => StringLit(lit.str) } |
       boolliteral ^^ { lit => BoolLit(lit.b) } |
       intliteral ^^ { lit => IntLit(lit.i) } |
-      floatliteral ^^ { lit => FloatLit(lit.v) }
+      floatliteral ^^ { lit => FloatLit(lit.v) } |
+      nullliteral ^^ { lit => NullLit() }
   }
 
   private lazy val unopexp: PackratParser[Exp] = positioned {
@@ -255,6 +256,7 @@ object Parser extends PackratParsers {
       case "Boolean" => Left(BoolType())
       case "Float" => Left(FloatType())
       case "Unit" => Left(TupleType(Nil))
+      case "Null" => Left(NullType())
     }
     } |
       (LEFT_PAREN() ~ RIGHT_PAREN()) ^^ { case _ ~ _ => Left(TupleType(Nil)) } |
@@ -263,7 +265,8 @@ object Parser extends PackratParsers {
         case Left(TupleType(it)) => Right(TupleType(it))  // if parenthesis was of the kind ((T, T')) we generate a Right
         case Right(x) => Right(x)                         // we ignore any further nesting, i.e. (((T, T'))) == ((T, T'))
         case Left(x) => Left(x)                           // parenthesization of a non-tuple type: ignoring nesting
-      } }
+      } } |
+      identifier ^^ (id => Left(ClassType(id.str).setPos(id.pos)))
   }
 
   private def binop(antiPrecedence: Int): PackratParser[BinOp] = positioned {

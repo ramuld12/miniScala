@@ -4,6 +4,8 @@ import miniscala.Ast._
 import miniscala.TypeChecker.getFunType
 import miniscala.Unparser.unparse
 
+import scala.util.parsing.input.Position
+
 /**
   * Type checker for MiniScala.
   */
@@ -11,16 +13,27 @@ object TypeChecker {
 
   type TypeEnv = Map[Id, Type]
 
-  def typeCheck(e: Exp, tenv: TypeEnv): Type = e match {
+  type ClassTypeEnv = Map[Id, ConstructorType]
+
+  case class RefType(thetype: Type) extends Type
+
+  case class ConstructorType(srcpos: Position, params: List[FunParam], membertypes: TypeEnv) extends Type
+
+  val unitType = TupleType(Nil)
+
+  def typeCheck(e: Exp, tenv: TypeEnv, ctenv: ClassTypeEnv): Type = e match {
     case IntLit(_) => IntType()
     case BoolLit(_) => BoolType()
     case FloatLit(_) => FloatType()
     case StringLit(_) => StringType()
-    case VarExp(x) =>
-      tenv.getOrElse(x, throw new TypeError(s"Unknown identifier '$x'", e))
+    case NullLit() => NullType()
+    case VarExp(x) => tenv.getOrElse(x, throw new TypeError(s"Unknown identifier '$x'", e)) match {
+      case RefType(thetype) => thetype
+      case t: Type => t
+    }
     case BinOpExp(leftexp, op, rightexp) =>
-      val lefttype = typeCheck(leftexp, tenv)
-      val righttype = typeCheck(rightexp, tenv)
+      val lefttype = typeCheck(leftexp, tenv, ctenv)
+      val righttype = typeCheck(rightexp, tenv, ctenv)
       op match {
         case PlusBinOp() =>
           (lefttype, righttype) match {
@@ -99,12 +112,13 @@ object TypeChecker {
           }
         case _ => throw new TypeError(s"Type mismatch at '$condexp', unexpected types ${unparse(thenexp)} and ${unparse(elseexp)}", e)
       }
-    case BlockExp(vals, defs, exp) =>
+    case BlockExp(vals, vars, defs, classes, exps) =>
       var tenv1 = tenv
       for (d <- vals) {
-        val t = typeCheck(d.exp, tenv1)
-        checkTypesEqual(t, d.opttype, d)
-        tenv1 = tenv1 + (d.x -> d.opttype.getOrElse(t))
+        val t = typeCheck(d.exp, tenv1, ctenv)
+        val ot = getType(d.opttype, ctenv, d)
+        checkSubtype(t, ot, d)
+        tenv1 = tenv1 + (d.x -> ot.getOrElse(t))
       }
       for (d <- vars) {
         val t = typeCheck(d.exp, tenv1, ctenv)
@@ -143,7 +157,7 @@ object TypeChecker {
       res
     case TupleExp(exps) => TupleType(exps.map(x => typeCheck(x, tenv, ctenv)))
     case MatchExp(exp, cases) =>
-      val exptype = typeCheck(exp, tenv)
+      val exptype = typeCheck(exp, tenv, ctenv)
       exptype match {
         case TupleType(ts) =>
           for (c <- cases) {
@@ -180,9 +194,69 @@ object TypeChecker {
         val paramtype = param.opttype.getOrElse(throw new TypeError(s"Error in 'LambdaExp', can't acces ${param.opttype}", e))
         tenv1 = tenv1 + (param.x -> paramtype)
       }
-      typeCheck(body,tenv1)
+      typeCheck(body, tenv1, ctenv)
+    case AssignmentExp(x, exp) =>
+      tenv.getOrElse(x, throw new TypeError(s"Unknown identifier '$x'", e)) match {
+        case RefType(thetype) =>
+          val t = typeCheck(exp, tenv, ctenv)
+          checkSubtype(t, Option(thetype), e)
+          unitType
+        case _ => throw new TypeError(s"RefType expected for assignment, got '$x'", e)
+      }
+    case WhileExp(cond, body) =>
+      val condtype = typeCheck(cond, tenv, ctenv)
+      condtype match {
+        case BoolType() => typeCheck(body, tenv, ctenv)
+        case _ => throw new TypeError(s"Error in 'WhileExp', first argument expected to be boolean, got $condtype", e)
+      }
+    case DoWhileExp(body, guard) =>
+      val bodytype = typeCheck(body, tenv, ctenv)
+      val guardtype = typeCheck(guard, tenv, ctenv)
+      guardtype match {
+        case BoolType() => bodytype
+        case _ => throw new TypeError(s"Error in 'DoWhileExp', second argument expected to be boolean, got $guardtype", e)
+      }
+    case NewObjExp(klass, args) =>
+      val c = ctenv.getOrElse(klass, throw new TypeError(s"Unknown class name '$klass'", e))
+      c match {
+        case ConstructorType(_, params, _) =>
+          if (params.length == args.length) {
+            for ((a, p) <- args.zip(params)) {
+              val argtype = typeCheck(a, tenv, ctenv)
+              val paramtype = getType(p.opttype, ctenv, c)
+              checkSubtype(argtype, paramtype, c)
+            }
+            c
+          }
+          else throw new TypeError(s"Unequal number of arguments between $klass and $args", e)
+        case _ => throw new TypeError(s"New object was not a constructor type", e)
+      }
+    case LookupExp(objexp, member) =>
+      val objtype = typeCheck(objexp, tenv, ctenv)
+      objtype match {
+        case ConstructorType(_, _, members) =>
+          getType(members.getOrElse(member, throw new TypeError(s"No such member: $member", e)), ctenv)
+        case _ => throw new TypeError(s"ConstructorType expected for lookup, got $objexp", e)
+      }
     case _ => throw new TypeError(s"Type mismatch at exp input for typeCheck, unexpected value $e", e)
   }
+
+  /**
+    * Returns the proper type for `t`.
+    * Class names are converted to proper types according to the class-type environment `ctenv`.
+    */
+  def getType(t: Type, ctenv: ClassTypeEnv): Type = t match {
+    case ClassType(klass) => ctenv.getOrElse(klass, throw new TypeError(s"Unknown class '$klass'", t))
+    case IntType() | BoolType() | FloatType() | StringType() | NullType() => t
+    case TupleType(ts) => TupleType(ts.map(tt => getType(tt, ctenv)))
+    case FunType(paramtypes, restype) => FunType(paramtypes.map(tt => getType(tt, ctenv)), getType(restype, ctenv))
+    case _ => throw new RuntimeException(s"Unexpected type $t") // this case is unreachable...
+  }
+
+  /**
+    * Returns the proper type for `t` (if present).
+    */
+  def getType(ot: Option[Type], ctenv: ClassTypeEnv, n: AstNode): Option[Type] = ot.map(t => getType(t, ctenv))
 
   /**
     * Returns the function type for the function declaration `d`.
@@ -190,6 +264,20 @@ object TypeChecker {
   def getFunType(d: DefDecl): FunType =
     FunType(d.params.map(p => p.opttype.getOrElse(throw new TypeError(s"Type annotation missing at parameter ${p.x}", p))),
       d.optrestype.getOrElse(throw new TypeError(s"Type annotation missing at function result ${d.fun}", d)))
+
+  /**
+    * Returns the constructor type for the class declaration `d`.
+    */
+  def getConstructorType(d: ClassDecl, ctenv: ClassTypeEnv, classes: List[ClassDecl]): ConstructorType = {
+    var membertypes: TypeEnv = Map()
+    for (m <- d.body.vals)
+      membertypes = membertypes + (m.x -> m.opttype.getOrElse(throw new TypeError(s"Type annotation missing at field ${m.x}", m)))
+    for (m <- d.body.vars)
+      membertypes = membertypes + (m.x -> m.opttype.getOrElse(throw new TypeError(s"Type annotation missing at field ${m.x}", m)))
+    for (m <- d.body.defs)
+      membertypes = membertypes + (m.fun -> getFunType(m))
+    ConstructorType(d.pos, d.params, membertypes)
+  }
 
   /**
     * Checks that the types `t1` and `ot2` are equal (if present), throws type error exception otherwise.

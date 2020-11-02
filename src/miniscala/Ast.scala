@@ -63,6 +63,8 @@ object Ast {
 
   case class StringLit(c: String) extends Literal
 
+  case class NullLit() extends Literal
+
   /**
     * Binary operators.
     */
@@ -114,6 +116,8 @@ object Ast {
 
   case class DefDecl(fun: Id, params: List[FunParam], optrestype: Option[Type], body: Exp) extends Decl
 
+  case class ClassDecl(klass: Id, params: List[FunParam], body: BlockExp) extends Decl
+
   /**
     * Function parameters.
     */
@@ -140,6 +144,10 @@ object Ast {
   case class TupleType(types: List[Type]) extends Type
 
   case class FunType(paramtypes: List[Type], restype: Type) extends Type
+
+  case class ClassType(klass: Id) extends Type
+
+  case class NullType() extends Type
 
   /**
     * Exception with a message and (optionally) a source code position.

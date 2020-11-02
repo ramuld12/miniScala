@@ -4,6 +4,7 @@ import miniscala.Ast._
 import miniscala.Unparser.unparse
 
 import scala.io.StdIn
+import scala.util.parsing.input.Position
 
 /**
   * Interpreter for MiniScala.
@@ -22,32 +23,52 @@ object Interpreter {
 
   case class TupleVal(vs: List[Val]) extends Val
 
-  case class ClosureVal(params: List[FunParam], optrestype: Option[Type], body: Exp, env: Env, defs: List[DefDecl]) extends Val
+  case class ClosureVal(params: List[FunParam], optrestype: Option[Type], body: Exp, env: Env, cenv: ClassEnv) extends Val
+
+  case class RefVal(loc: Loc, opttype: Option[Type]) extends Val
+
+  case class ObjectVal(members: Env) extends Val
+
+  val unitVal = TupleVal(Nil)
+
+  case class Constructor(params: List[FunParam], body: BlockExp, env: Env, cenv: ClassEnv, classes: List[ClassDecl], srcpos: Position)
+
+  case class ClassDeclType(srcpos: Position) extends Type
 
   type Env = Map[Id, Val]
 
-  def eval(e: Exp, env: Env): Val = e match {
-    case IntLit(c) => IntVal(c)
-    case BoolLit(c) => BoolVal(c)
-    case FloatLit(c) => FloatVal(c)
-    case StringLit(c) => StringVal(c)
+  type ClassEnv = Map[Id, Constructor]
+
+  type Sto = Map[Loc, Val]
+
+  type Loc = Int
+
+  def nextLoc(sto: Sto): Loc = sto.size
+
+  def eval(e: Exp, env: Env, cenv: ClassEnv, sto: Sto): (Val, Sto) = e match {
+    case IntLit(c) => (IntVal(c), sto)
+    case BoolLit(c) => (BoolVal(c), sto)
+    case FloatLit(c) => (FloatVal(c), sto)
+    case StringLit(c) => (StringVal(c), sto)
+    case NullLit() => trace(s"NullLit()")
+      (RefVal(-1, None), sto)
     case VarExp(x) =>
-      env.getOrElse(x, throw new InterpreterError(s"Unknown identifier '$x'", e))
+      (getValue(env.getOrElse(x, throw new InterpreterError(s"Unknown identifier '$x'", e)), sto), sto)
     case BinOpExp(leftexp, op, rightexp) =>
-      val leftval = eval(leftexp, env)
-      val rightval = eval(rightexp, env)
+      val (leftval, sto1) = eval(leftexp, env, cenv, sto)
+      val (rightval, sto2) = eval(rightexp, env, cenv, sto1)
       op match {
         case PlusBinOp() =>
           (leftval, rightval) match {
-            case (IntVal(v1), IntVal(v2)) => IntVal(v1 + v2)
-            case (FloatVal(v1), FloatVal(v2)) => FloatVal(v1 + v2)
-            case (IntVal(v1), FloatVal(v2)) => FloatVal(v1 + v2)
-            case (FloatVal(v1), IntVal(v2)) => FloatVal(v1 + v2)
-            case (StringVal(v1), StringVal(v2)) => StringVal(v1 + v2)
-            case (StringVal(v1), IntVal(v2)) => StringVal(v1 + v2)
-            case (StringVal(v1), FloatVal(v2)) => StringVal(v1 + v2)
-            case (IntVal(v1), StringVal(v2)) => StringVal(v1 + v2)
-            case (FloatVal(v1), StringVal(v2)) => StringVal(v1 + v2)
+            case (IntVal(v1), IntVal(v2)) => (IntVal(v1 + v2), sto2)
+            case (FloatVal(v1), FloatVal(v2)) => (FloatVal(v1 + v2), sto2)
+            case (IntVal(v1), FloatVal(v2)) => (FloatVal(v1 + v2), sto2)
+            case (FloatVal(v1), IntVal(v2)) => (FloatVal(v1 + v2), sto2)
+            case (StringVal(v1), StringVal(v2)) => (StringVal(v1 + v2), sto2)
+            case (StringVal(v1), IntVal(v2)) => (StringVal(v1 + v2), sto2)
+            case (StringVal(v1), FloatVal(v2)) => (StringVal(v1 + v2), sto2)
+            case (IntVal(v1), StringVal(v2)) => (StringVal(v1 + v2), sto2)
+            case (FloatVal(v1), StringVal(v2)) => (StringVal(v1 + v2), sto2)
             case _ => throw new InterpreterError(s"Type mismatch at '+', unexpected values ${valueToString(leftval)} and ${valueToString(rightval)}", op)
           }
         case MinusBinOp() =>
@@ -70,10 +91,10 @@ object Interpreter {
           if (rightval == IntVal(0) || rightval == FloatVal(0.0f))
             throw new InterpreterError(s"Division by zero", op)
           (leftval, rightval) match {
-            case (IntVal(v1), IntVal(v2)) => IntVal(v1 / v2)
-            case (FloatVal(v1), FloatVal(v2)) => FloatVal(v1 / v2)
-            case (IntVal(v1), FloatVal(v2)) => FloatVal(v1 / v2)
-            case (FloatVal(v1), IntVal(v2)) => FloatVal(v1 / v2)
+            case (IntVal(v1), IntVal(v2)) => (IntVal(v1 / v2), sto2)
+            case (FloatVal(v1), FloatVal(v2)) => (FloatVal(v1 / v2), sto2)
+            case (IntVal(v1), FloatVal(v2)) => (FloatVal(v1 / v2), sto2)
+            case (FloatVal(v1), IntVal(v2)) => (FloatVal(v1 / v2), sto2)
             case _ => throw new InterpreterError(s"Type mismatch at '/', unexpected values ${valueToString(leftval)} and ${valueToString(rightval)}", op)
           }
         case ModuloBinOp() =>

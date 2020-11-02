@@ -1,0 +1,1102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="BookmarkManager">
+    <bookmark url="file://$PROJECT_DIR$/src/miniscala/Unparser.scala" line="29" mnemonic="4" />
+    <bookmark url="file://$PROJECT_DIR$/src/miniscala/Test95.scala" line="31" mnemonic="7" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="c192ac9e-67c5-4160-8208-c6e44067d845" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/miniscala/Fold.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/miniscala.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/miniscala.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/miniscala/Exercise122.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/miniscala/Exercise122.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/miniscala/Test68.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/miniscala/Test68.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/miniscala/Week2_excecises.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/miniscala/Week2_excecises.scala" afterDir="false" />
+    </list>
+    <list id="336271d2-9886-4886-93ba-482643108046" name="abstractmachine1" comment="">
+      <change afterPath="$PROJECT_DIR$/src/miniscala/AbstractMachine.scala" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/miniscala/Compiler.scala" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/miniscala/parser/Files.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/miniscala/Options.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/miniscala/Options.scala" afterDir="false" />
+    </list>
+    <list id="2a1436ef-bfcb-445e-bb4d-5b45e1728d20" name="abstractmachine2" comment="">
+      <change beforePath="$PROJECT_DIR$/src/miniscala/Main.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/miniscala/Main.scala" afterDir="false" />
+    </list>
+    <list id="4562090f-efc4-42da-b75d-871a895ab43c" name="miniscala6 (1)" comment="">
+      <change beforePath="$PROJECT_DIR$/src/miniscala/Interpreter.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/miniscala/Interpreter.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/miniscala/TypeChecker.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/miniscala/TypeChecker.scala" afterDir="false" />
+    </list>
+    <list id="a09c84aa-3f89-4f4f-8825-294246b83005" name="miniscala7 (1)" comment="miniscala7 (1)">
+      <change beforePath="$PROJECT_DIR$/src/miniscala/Ast.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/miniscala/Ast.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/miniscala/Vars.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/miniscala/Vars.scala" afterDir="false" />
+    </list>
+    <list id="33a4dea1-5ca0-41c5-b0c5-21e85340ab63" name="miniscala8" comment="">
+      <change beforePath="$PROJECT_DIR$/src/miniscala/parser/Parser.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/miniscala/parser/Parser.scala" afterDir="false" />
+    </list>
+    <ignored path="$PROJECT_DIR$/out/" />
+    <ignored path="$PROJECT_DIR$/target/" />
+    <ignored path="$PROJECT_DIR$/project/project/target/" />
+    <ignored path="$PROJECT_DIR$/project/target/" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ChangesViewManager">
+    <option name="groupingKeys">
+      <option value="directory" />
+    </option>
+  </component>
+  <component name="DefaultGradleProjectSettings">
+    <option name="isMigrated" value="true" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/miniscala/Interpreter.scala">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="441">
+              <caret line="25" column="97" selection-start-line="25" selection-start-column="97" selection-end-line="25" selection-end-column="97" />
+              <folding>
+                <element signature="e#19#41#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/miniscala/TypeChecker.scala">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="21">
+              <caret line="260" column="5" selection-start-line="260" selection-start-column="5" selection-end-line="260" selection-end-column="5" />
+              <folding>
+                <element signature="e#19#41#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/miniscala/Unparser.scala">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="840">
+              <caret line="41" column="39" selection-start-line="41" selection-start-column="39" selection-end-line="41" selection-end-column="39" />
+              <folding>
+                <element signature="e#19#41#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Scala Object" />
+        <option value="Package Object" />
+      </list>
+    </option>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>r</find>
+      <find>leexp</find>
+      <find>valdecl</find>
+      <find>body</find>
+      <find>set</find>
+      <find>{ val x = e1; e2 }</find>
+      <find>unop</find>
+      <find>eval</find>
+      <find>&amp;</find>
+      <find>null</find>
+      <find>checkvaluetype</find>
+      <find>checktype</find>
+      <find>checktypesequal</find>
+      <find>dowhile</find>
+      <find>zip</find>
+      <find>loop</find>
+      <find>read</find>
+      <find>while</find>
+      <find>map</find>
+      <find>exec</find>
+      <find>parse</find>
+      <find>load</find>
+    </findStrings>
+    <replaceStrings>
+      <replace>l</replace>
+      <replace>l_exp</replace>
+    </replaceStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="PREVIOUS_COMMIT_AUTHORS">
+      <list>
+        <option value="ramuld12 &lt;rasmus.herskind@hotmail.com&gt;" />
+      </list>
+    </option>
+    <option name="ROOT_SYNC" value="DONT_SYNC" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/examples/test1.s" />
+        <option value="$PROJECT_DIR$/src/miniscala/Week1.scala" />
+        <option value="$PROJECT_DIR$/src/Week2_excecises.scala" />
+        <option value="$PROJECT_DIR$/src/miniscala/parser/Week2_excecises.scala" />
+        <option value="$PROJECT_DIR$/src/miniscala/Test2" />
+        <option value="$PROJECT_DIR$/src/miniscala/Test2.scala" />
+        <option value="$PROJECT_DIR$/examples/calc1.s" />
+        <option value="$PROJECT_DIR$/src/miniscala/Test.scala" />
+        <option value="$PROJECT_DIR$/src/miniscala/Test38.scala" />
+        <option value="$PROJECT_DIR$/src/miniscala/Test37.scala" />
+        <option value="$PROJECT_DIR$/.gitignore" />
+        <option value="$PROJECT_DIR$/../miniscala5/src/miniscala/Vars.scala" />
+        <option value="$PROJECT_DIR$/../miniscala5/src/miniscala/Interpreter.scala" />
+        <option value="$PROJECT_DIR$/../miniscala5/src/miniscala/TypeChecker.scala" />
+        <option value="$PROJECT_DIR$/src/miniscala/ex62.scala" />
+        <option value="$PROJECT_DIR$/src/miniscala/Testting.scala" />
+        <option value="$PROJECT_DIR$/src/Set.scala" />
+        <option value="$PROJECT_DIR$/src/miniscala/package.scala" />
+        <option value="$PROJECT_DIR$/src/miniscala/Test88.scala" />
+        <option value="$PROJECT_DIR$/src/miniscala/Lambda.scala" />
+        <option value="$USER_HOME$/AppData/Local/Temp/Rar$DRa19648.1521/src/miniscala/Vars.scala" />
+        <option value="$USER_HOME$/AppData/Local/Temp/Rar$DRa19648.32049/src/miniscala/Vars.scala" />
+        <option value="$PROJECT_DIR$/src/miniscala/Vars.scala" />
+        <option value="$PROJECT_DIR$/src/miniscala/Set.scala" />
+        <option value="$PROJECT_DIR$/src/miniscala/Test49.scala" />
+        <option value="$PROJECT_DIR$/examples/fac2.s" />
+        <option value="$PROJECT_DIR$/src/miniscala/Test95.scala" />
+        <option value="$PROJECT_DIR$/src/miniscala/Main.scala" />
+        <option value="$PROJECT_DIR$/src/miniscala/Test112.scala" />
+        <option value="$PROJECT_DIR$/src/miniscala/Test111.scala" />
+        <option value="$PROJECT_DIR$/src/miniscala/Ast.scala" />
+        <option value="$PROJECT_DIR$/src/miniscala/Unparser.scala" />
+        <option value="$PROJECT_DIR$/src/miniscala/TypeChecker.scala" />
+        <option value="$PROJECT_DIR$/src/miniscala/Interpreter.scala" />
+        <option value="$USER_HOME$/Downloads/Exercise122 (1).scala" />
+        <option value="$PROJECT_DIR$/src/miniscala/parser/Parser.scala" />
+        <option value="$PROJECT_DIR$/src/miniscala/Exercise121.scala" />
+        <option value="$PROJECT_DIR$/src/miniscala/Options.scala" />
+        <option value="$PROJECT_DIR$/src/miniscala/Test132.scala" />
+        <option value="$PROJECT_DIR$/src/miniscala/Exercise145.scala" />
+        <option value="$PROJECT_DIR$/examples/fac4.s" />
+        <option value="$PROJECT_DIR$/src/miniscala/AbstractMachine.scala" />
+        <option value="$PROJECT_DIR$/src/miniscala/Week2_excecises.scala" />
+        <option value="$PROJECT_DIR$/src/miniscala/Test68.scala" />
+        <option value="$PROJECT_DIR$/src/miniscala/Exercise72.scala" />
+        <option value="$PROJECT_DIR$/src/miniscala/Fold.scala" />
+        <option value="$PROJECT_DIR$/src/miniscala/Exercise122.scala" />
+        <option value="$PROJECT_DIR$/src/miniscala/Compiler.scala" />
+        <option value="$PROJECT_DIR$/src/miniscala/Eksamensopgaver.scala" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="95" />
+    <option name="y" value="50" />
+    <option name="width" value="1750" />
+    <option name="height" value="970" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="Scope" />
+      <pane id="PackagesPane" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="miniscala" type="b2602c69:ProjectViewProjectNode" />
+              <item name="miniscala" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="miniscala" type="b2602c69:ProjectViewProjectNode" />
+              <item name="miniscala" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="miniscala" type="b2602c69:ProjectViewProjectNode" />
+              <item name="miniscala" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="miniscala" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="TODO_SCOPE" value="All Places" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1554799560228" />
+    <property name="last_opened_file_path" value="$USER_HOME$/Downloads/abstractmachine2.patch" />
+    <property name="project.structure.last.edited" value="Libraries" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.0" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager" selected="Application.Eksamensopgaver">
+    <configuration name="Eksamensopgaver" type="Application" factoryName="Application" temporary="true">
+      <option name="MAIN_CLASS_NAME" value="miniscala.Eksamensopgaver" />
+      <module name="miniscala" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="miniscala.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Exercise122" type="Application" factoryName="Application" temporary="true">
+      <option name="MAIN_CLASS_NAME" value="miniscala.Exercise122" />
+      <module name="miniscala" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="miniscala.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Exercise72" type="Application" factoryName="Application" temporary="true">
+      <option name="MAIN_CLASS_NAME" value="miniscala.Exercise72" />
+      <module name="miniscala" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="miniscala.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Fac2 trace" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="miniscala.Main" />
+      <module name="miniscala" />
+      <option name="PROGRAM_PARAMETERS" value="-run -trace examples/tak.s" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Fold" type="Application" factoryName="Application" temporary="true">
+      <option name="MAIN_CLASS_NAME" value="miniscala.Fold" />
+      <module name="miniscala" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="miniscala.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Test" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="miniscala.Test" />
+      <module name="miniscala" />
+      <option name="PROGRAM_PARAMETERS" value="-run examples/calc1.s" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Test49" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="miniscala.Test49" />
+      <module name="miniscala" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Test68" type="Application" factoryName="Application" temporary="true">
+      <option name="MAIN_CLASS_NAME" value="miniscala.Test68" />
+      <module name="miniscala" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="miniscala.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Test88" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="miniscala.Main" />
+      <module name="miniscala" />
+      <option name="PROGRAM_PARAMETERS" value="-lambda examples/mc91.s" />
+      <option name="VM_PARAMETERS" value="-Xss100m" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Unnamed (1)" type="Application" factoryName="Application" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="miniscala.Main" />
+      <module name="miniscala" />
+      <option name="PROGRAM_PARAMETERS" value="-run -trace examples/fac4.s" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Unnamed" type="Application" factoryName="Application" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="miniscala.Main" />
+      <module name="miniscala" />
+      <option name="PROGRAM_PARAMETERS" value="-run examples/test1.s" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Week 4 test2" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="miniscala.Main" />
+      <module name="miniscala" />
+      <option name="PROGRAM_PARAMETERS" value="-run examples/even.s" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Week 4 typetest" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="miniscala.Main" />
+      <module name="miniscala" />
+      <option name="PROGRAM_PARAMETERS" value="-types examples/even.s" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Week2 excercises" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="miniscala.Week2_excecises" />
+      <module name="miniscala" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Week2" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="miniscala.Main" />
+      <module name="miniscala" />
+      <option name="PROGRAM_PARAMETERS" value="-unparse -run -trace examples/ex21.s" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Week4 test" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="miniscala.Main" />
+      <module name="miniscala" />
+      <option name="PROGRAM_PARAMETERS" value="-run examples/fib2.s" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="scala-parser-combinators_2.12-1.1.1.jar" type="JarApplication">
+      <option name="JAR_PATH" value="$PROJECT_DIR$/lib/scala-parser-combinators_2.12-1.1.1.jar" />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Application.Fac2 trace" />
+      <item itemvalue="Application.Test49" />
+      <item itemvalue="Application.Test88" />
+      <item itemvalue="Application.Test" />
+      <item itemvalue="Application.Unnamed (1)" />
+      <item itemvalue="Application.Unnamed" />
+      <item itemvalue="Application.Week 4 test2" />
+      <item itemvalue="Application.Week 4 typetest" />
+      <item itemvalue="Application.Week2 excercises" />
+      <item itemvalue="Application.Week2" />
+      <item itemvalue="Application.Week4 test" />
+      <item itemvalue="Application.Eksamensopgaver" />
+      <item itemvalue="Application.Exercise122" />
+      <item itemvalue="Application.Exercise72" />
+      <item itemvalue="Application.Fold" />
+      <item itemvalue="Application.Test68" />
+      <item itemvalue="JAR Application.scala-parser-combinators_2.12-1.1.1.jar" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.Eksamensopgaver" />
+        <item itemvalue="Application.Exercise122" />
+        <item itemvalue="Application.Fold" />
+        <item itemvalue="Application.Exercise72" />
+        <item itemvalue="Application.Test68" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SbtLocalSettings">
+    <option name="availableProjects">
+      <map>
+        <entry>
+          <key>
+            <ExternalProjectPojo>
+              <option name="name" value="miniscala" />
+              <option name="path" value="$PROJECT_DIR$" />
+            </ExternalProjectPojo>
+          </key>
+          <value>
+            <list>
+              <ExternalProjectPojo>
+                <option name="name" value="miniscala [file:/C:/Users/rasmu/IdeaProjects/miniscala/]" />
+                <option name="path" value="$PROJECT_DIR$" />
+              </ExternalProjectPojo>
+              <ExternalProjectPojo>
+                <option name="name" value="miniscala-build" />
+                <option name="path" value="$PROJECT_DIR$/project" />
+              </ExternalProjectPojo>
+            </list>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="modificationStamps">
+      <map>
+        <entry key="$PROJECT_DIR$" value="3098054423064" />
+        <entry key="$PROJECT_DIR$/build.sbt" value="412428231" />
+        <entry key="$PROJECT_DIR$/project/build.properties" value="1396028727" />
+      </map>
+    </option>
+    <option name="projectSyncType">
+      <map>
+        <entry key="$PROJECT_DIR$" value="RE_IMPORT" />
+      </map>
+    </option>
+  </component>
+  <component name="ScalaProjectSettings">
+    <option name="dontShowConversionDialog" value="true" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="c192ac9e-67c5-4160-8208-c6e44067d845" name="Default Changelist" comment="" />
+      <changelist id="4562090f-efc4-42da-b75d-871a895ab43c" name="miniscala6 (1)" comment="" />
+      <changelist id="a09c84aa-3f89-4f4f-8825-294246b83005" name="miniscala7 (1)" comment="" />
+      <changelist id="33a4dea1-5ca0-41c5-b0c5-21e85340ab63" name="miniscala8" comment="" />
+      <changelist id="336271d2-9886-4886-93ba-482643108046" name="abstractmachine1" comment="" />
+      <changelist id="2a1436ef-bfcb-445e-bb4d-5b45e1728d20" name="abstractmachine2" comment="" />
+      <created>1549027211139</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1549027211139</updated>
+    </task>
+    <task id="LOCAL-00001" summary="Week 4 of the project, but first version on git.&#10;This version can use first order functions">
+      <created>1551741663364</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1551741663364</updated>
+    </task>
+    <task id="LOCAL-00002" summary="The .gitignore file for specific excercises in the course">
+      <created>1551742005685</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1551742005685</updated>
+    </task>
+    <task id="LOCAL-00003" summary="The .gitignore file for specific excercises in the course">
+      <created>1552396428371</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1552396428371</updated>
+    </task>
+    <task id="LOCAL-00004" summary="The .gitignore file for specific excercises in the course">
+      <created>1553159666080</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1553159666080</updated>
+    </task>
+    <task id="LOCAL-00005" summary="The .gitignore file for specific excercises in the course&#10;&#10;Now with lambdacalculus included and more functional apporach&#10;for finding free variables">
+      <created>1553676199998</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1553676199998</updated>
+    </task>
+    <task id="LOCAL-00006" summary="The .gitignore file for specific excercises in the course&#10;&#10;Class environments now included simply">
+      <created>1555077776036</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1555077776036</updated>
+    </task>
+    <task id="LOCAL-00007" summary="The .gitignore file for specific excercises in the course&#10;&#10;Final version of miniscala, now has support for doWhile, || and &amp;&amp;">
+      <created>1556201701940</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1556201701944</updated>
+    </task>
+    <task id="LOCAL-00008" summary="The .gitignore file for specific excercises in the course&#10;&#10;Final version of miniscala, now has support for doWhile, || and &amp;&amp;&#10;&#10;Added some small changes to the implementation">
+      <created>1556456178328</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1556456178328</updated>
+    </task>
+    <task id="LOCAL-00009" summary="A few exercises to test covariance and contracariance">
+      <created>1556743228429</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1556743228429</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
+    <servers />
+  </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
+    <editor active="true" />
+    <layout>
+      <window_info id="Repositories" order="0" weight="0.3295302" />
+      <window_info active="true" content_ui="combo" id="Project" order="1" visible="true" weight="0.1885906" />
+      <window_info id="Structure" order="2" side_tool="true" weight="0.25" />
+      <window_info id="Image Layers" order="3" />
+      <window_info id="Designer" order="4" />
+      <window_info id="Capture Tool" order="5" />
+      <window_info id="UI Designer" order="6" />
+      <window_info id="Favorites" order="7" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.49932885" weight="0.3286119" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.43154362" visible="true" weight="0.3045326" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.49932885" weight="0.39943343" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" sideWeight="0.49798658" weight="0.3286119" />
+      <window_info anchor="bottom" id="Version Control" order="7" weight="0.28186968" />
+      <window_info anchor="bottom" id="sbt-shell-toolwindow" order="8" sideWeight="0.49731544" weight="0.3286119" />
+      <window_info anchor="bottom" id="Terminal" order="9" sideWeight="0.4966443" weight="0.3286119" />
+      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.56845635" side_tool="true" weight="0.3045326" />
+      <window_info anchor="bottom" id="Build" order="11" sideWeight="0.49925372" weight="0.3297546" />
+      <window_info anchor="bottom" id="Messages" order="12" sideWeight="0.3966443" weight="0.32719547" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="Palette" order="3" />
+      <window_info anchor="right" id="Maven" order="4" />
+      <window_info anchor="right" id="Theme Preview" order="5" />
+      <window_info anchor="right" id="Capture Analysis" order="6" />
+      <window_info anchor="right" id="Palette&#9;" order="7" />
+      <window_info anchor="right" id="sbt" order="8" />
+    </layout>
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="RECENTLY_FILTERED_USER_GROUPS">
+                <collection />
+              </option>
+              <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
+                <collection />
+              </option>
+              <option name="COLUMN_ORDER">
+                <list>
+                  <option value="0" />
+                  <option value="1" />
+                  <option value="2" />
+                  <option value="3" />
+                </list>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="RECENT_FILTERS">
+      <map>
+        <entry key="Branch">
+          <value>
+            <list />
+          </value>
+        </entry>
+        <entry key="User">
+          <value>
+            <list />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Week 4 of the project, but first version on git.&#10;This version can use first order functions" />
+    <MESSAGE value="The .gitignore file for specific excercises in the course" />
+    <MESSAGE value="The .gitignore file for specific excercises in the course&#10;&#10;Now with lambdacalculus included and more functional apporach&#10;for finding free variables" />
+    <MESSAGE value="The .gitignore file for specific excercises in the course&#10;&#10;Class environments now included simply" />
+    <MESSAGE value="The .gitignore file for specific excercises in the course&#10;&#10;Final version of miniscala, now has support for doWhile, || and &amp;&amp;" />
+    <MESSAGE value="The .gitignore file for specific excercises in the course&#10;&#10;Final version of miniscala, now has support for doWhile, || and &amp;&amp;&#10;&#10;Added some small changes to the implementation" />
+    <MESSAGE value="A few exercises to test covariance and contracariance" />
+    <option name="LAST_COMMIT_MESSAGE" value="A few exercises to test covariance and contracariance" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="scala-line">
+          <url>file://$PROJECT_DIR$/src/miniscala/Exercise145.scala</url>
+          <line>76</line>
+          <properties />
+          <option name="timeStamp" value="9" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$USER_HOME$/AppData/Local/Temp/Rar$DRa7396.45936/src/miniscala/Interpreter.scala" />
+    <entry file="file://$USER_HOME$/AppData/Local/Temp/Rar$DRa7396.47894/src/miniscala/TypeChecker.scala" />
+    <entry file="file://$PROJECT_DIR$/src/miniscala/Main.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="903">
+          <caret line="44" selection-start-line="44" selection-end-line="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-library/srcs/scala-library-2.12.8-sources.jar!/scala/collection/immutable/Map.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="155">
+          <caret line="113" selection-start-line="113" selection-end-line="113" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Temp/Rar$DRa14776.33861/src/miniscala/Ast.scala" />
+    <entry file="file://$PROJECT_DIR$/src/miniscala/Test111.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="924">
+          <caret line="46" column="20" selection-start-line="46" selection-start-column="20" selection-end-line="46" selection-end-column="20" />
+          <folding>
+            <element signature="e#19#41#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Downloads/Exercise122 (1).scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="126">
+          <caret line="6" column="7" lean-forward="true" selection-start-line="6" selection-start-column="7" selection-end-line="6" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/miniscala/Set.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="2" selection-start-column="2" selection-end-column="2" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/miniscala/Options.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-901">
+          <caret line="5" column="7" selection-start-line="5" selection-start-column="7" selection-end-line="5" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/miniscala/parser/Tokens.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="189">
+          <caret line="9" column="7" selection-start-line="9" selection-start-column="7" selection-end-line="9" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-library/srcs/scala-library-2.12.8-sources.jar!/scala/collection/IterableLike.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="227">
+          <caret line="260" column="6" selection-start-line="260" selection-start-column="6" selection-end-line="260" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/miniscala/Test49.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="2" selection-start-column="2" selection-end-column="2" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Downloads/Exercise122 (2).scala">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Temp/Rar$DRa12420.28375/miniscala/AbstractMachine.scala" />
+    <entry file="file://$USER_HOME$/AppData/Local/Temp/Rar$DRa12420.34482/miniscala/Compiler.scala" />
+    <entry file="file://$PROJECT_DIR$/examples/fib.s">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/examples/fib2.s">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/examples/fib3.s">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="84">
+          <caret line="4" lean-forward="true" selection-start-line="4" selection-end-line="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/miniscala/Test112.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="5" column="16" lean-forward="true" selection-start-line="5" selection-start-column="16" selection-end-line="5" selection-end-column="16" />
+          <folding>
+            <element signature="e#19#49#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/miniscala/parser/Lexer.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="23" column="4" selection-start-line="23" selection-start-column="4" selection-end-line="23" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-library/srcs/scala-library-2.12.8-sources.jar!/scala/Predef.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="155">
+          <caret line="207" selection-start-line="207" selection-end-line="207" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-library/srcs/scala-library-2.12.8-sources.jar!/scala/collection/TraversableOnce.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="155">
+          <caret line="113" column="6" selection-start-line="113" selection-start-column="6" selection-end-line="113" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk-11.0.2/lib/src.zip!/java.base/java/lang/Exception.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="227">
+          <caret line="100" column="11" selection-start-line="100" selection-start-column="11" selection-end-line="100" selection-end-column="11" />
+          <folding>
+            <element signature="e#3166#3167#0" expanded="true" />
+            <element signature="e#3194#3195#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-library/jars/scala-library-2.12.8.jar!/scala/package.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="42">
+          <caret line="2" column="7" selection-start-line="2" selection-start-column="7" selection-end-line="2" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-library/srcs/scala-library-2.12.8-sources.jar!/scala/package.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="168">
+          <caret line="18" column="7" selection-start-line="18" selection-start-column="7" selection-end-line="18" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk-11.0.2/lib/src.zip!/java.base/java/lang/Object.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="227">
+          <caret line="244" column="18" selection-start-line="244" selection-start-column="18" selection-end-line="244" selection-end-column="18" />
+          <folding>
+            <element signature="e#10225#10226#0" expanded="true" />
+            <element signature="e#10308#10309#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-library/srcs/scala-library-2.12.8-sources.jar!/scala/collection/immutable/List.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="155">
+          <caret line="429" selection-start-line="429" selection-end-line="429" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/examples/fac4.s">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="126">
+          <caret line="6" column="4" selection-start-line="6" selection-start-column="4" selection-end-line="6" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/miniscala/Test132.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="39" column="40" selection-start-line="39" selection-start-column="40" selection-end-line="39" selection-end-column="40" />
+          <folding>
+            <element signature="e#19#46#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/miniscala/Week1.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="42">
+          <caret line="2" column="7" selection-start-line="2" selection-start-column="7" selection-end-line="2" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/miniscala/Vars.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="231">
+          <caret line="11" column="34" selection-start-line="11" selection-start-column="34" selection-end-line="11" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/miniscala/Week2_excecises.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="231">
+          <caret line="57" column="5" selection-start-line="57" selection-start-column="5" selection-end-line="57" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/miniscala/Exercise145.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1337">
+          <caret line="5" lean-forward="true" selection-start-line="5" selection-end-line="5" />
+          <folding>
+            <element signature="e#19#46#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/miniscala/Test.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-313">
+          <caret line="6" column="7" selection-start-line="6" selection-start-column="7" selection-end-line="6" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/miniscala/Test68.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1197">
+          <caret line="9" column="41" selection-start-line="9" selection-start-column="41" selection-end-line="9" selection-end-column="41" />
+          <folding>
+            <element signature="e#19#41#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/miniscala/Test95.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="777">
+          <caret line="40" column="39" selection-start-line="40" selection-start-column="39" selection-end-line="40" selection-end-column="39" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/miniscala/Lambda.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-378">
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/miniscala/Ast.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="227">
+          <caret line="65" column="13" selection-start-line="65" selection-start-column="13" selection-end-line="65" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/examples/tak.s">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-library/srcs/scala-library-2.12.8-sources.jar!/scala/collection/mutable/ArrayStack.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2289">
+          <caret line="144" column="6" selection-start-line="144" selection-start-column="6" selection-end-line="144" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/miniscala/Exercise72.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="70">
+          <caret line="8" column="39" lean-forward="true" selection-start-line="8" selection-start-column="39" selection-end-line="8" selection-end-column="39" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/miniscala/parser/Parser.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="168">
+          <caret line="347" column="11" selection-start-line="347" selection-start-column="6" selection-end-line="347" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/miniscala/Fold.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="147">
+          <caret line="7" column="6" selection-start-line="7" selection-start-column="6" selection-end-line="7" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/miniscala/Exercise121.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1680">
+          <caret line="80" column="17" selection-start-line="80" selection-start-column="17" selection-end-line="80" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/miniscala/Exercise122.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1302">
+          <caret line="62" column="24" selection-start-line="62" selection-start-column="24" selection-end-line="62" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/miniscala/Compiler.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1512">
+          <caret line="73" column="20" selection-start-line="73" selection-start-column="20" selection-end-line="73" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/miniscala/AbstractMachine.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3213">
+          <caret line="154" column="28" selection-start-line="154" selection-start-column="28" selection-end-line="154" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/miniscala/Eksamensopgaver.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="252">
+          <caret line="12" column="37" selection-start-line="12" selection-start-column="37" selection-end-line="12" selection-end-column="37" />
+          <folding>
+            <element signature="e#18#40#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/miniscala/Interpreter.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="441">
+          <caret line="25" column="97" selection-start-line="25" selection-start-column="97" selection-end-line="25" selection-end-column="97" />
+          <folding>
+            <element signature="e#19#41#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/miniscala/Unparser.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="840">
+          <caret line="41" column="39" selection-start-line="41" selection-start-column="39" selection-end-line="41" selection-end-column="39" />
+          <folding>
+            <element signature="e#19#41#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/miniscala/TypeChecker.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="21">
+          <caret line="260" column="5" selection-start-line="260" selection-start-column="5" selection-end-line="260" selection-end-column="5" />
+          <folding>
+            <element signature="e#19#41#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ArtifactsStructureConfigurable.UI">
+        <settings>
+          <artifact-editor />
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="FacetStructureConfigurable.UI">
+        <settings>
+          <last-edited>No facets are configured</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="GlobalLibrariesConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="JdkListConfigurable.UI">
+        <settings>
+          <last-edited>11</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ModuleStructureConfigurable.UI">
+        <settings>
+          <last-edited>miniscala</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+                <option value="0.6" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ProjectLibrariesConfigurable.UI">
+        <settings>
+          <last-edited>scala-parser-combinators_2.12-1.1.1</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
+  </component>
+</project>
